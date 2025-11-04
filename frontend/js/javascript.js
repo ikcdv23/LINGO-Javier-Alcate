@@ -9,6 +9,11 @@ let estadoPartida = false; // mientras sea false la partida no acaba
 let PalUsuario = "";
 let posicion = { fila: 0, columna: 0 }; // PARA ESCRIBIR LAS LETRAS EN SU CELDA CORRECTA
 
+// --- VARIABLES DEL TEMPORIZADOR ---
+let timerInterval; // Guarda la referencia al "tictac" para poder pararlo
+let timeLeft = 60; // Segundos por intento
+const timerElement = document.getElementById("tiempoRestante");
+
 // --- FUINCIÓN ASINCRONA PARA CREAR UNA PALABRA ALEATORIA ---
 async function iniciarJuego() {
   document.getElementById("mensaje").innerText =
@@ -34,6 +39,9 @@ async function iniciarJuego() {
     document.getElementById("mensaje").innerText =
       "¡Juego listo! Adivina la palabra.";
     console.log("Palabra secreta cargada con éxito:", palabra);
+
+    // inicia temporizador
+    startTimer()
   } catch (error) {
     // 4. MANEJO DE ERRORES: Si falla la conexión o el formato de datos
     console.error("Error fatal al cargar la palabra secreta:", error);
@@ -65,33 +73,7 @@ document.getElementById("teclado").addEventListener("click", function (event) {
   }
 });
 
-// --- TEMPORIZADOR POR RONDA ---
-let timeLeft = 60;
-const timerElement = document.getElementById("tiempoRestante");
-let timerInterval;
 
-function startTimer() {
-  clearInterval(timerInterval);
-  timeLeft = 60;
-  timerElement.textContent = timeLeft;
-  timerElement.parentElement.classList.remove("warning");
-
-  timerInterval = setInterval(() => {
-    timeLeft--;
-    timerElement.textContent = timeLeft;
-
-    if (timeLeft <= 10) {
-      timerElement.parentElement.classList.add("warning");
-    }
-
-    if (timeLeft <= 0) {
-      clearInterval(timerInterval);
-      finDePartida("¡¡HAS PERDIDO!!");
-    }
-  }, 1000);
-}
-
-startTimer();
 
 // escribe la letra en la celda correspondiente.
 function escribir_letra(letra) {
@@ -181,6 +163,7 @@ function verificar_palabra() {
 
   // comprueba si has ganado
   if (contadorLetrasBien === 5) {
+    clearInterval(timerInterval);
     document.getElementById("mensaje").innerText =
       "La palabra correcta es " + palabra;
     finDePartida("¡HAS GANADO!");
@@ -191,6 +174,7 @@ function verificar_palabra() {
   // comprueba si ha perdido la partida antes de pasar a la siguiente linea
   if (posicion["fila"] === 4) {
     finDePartida("¡HAS PERDIDO!");
+    clearInterval(timerInterval);
     estadoPartida = true;
     return;
   }
@@ -206,8 +190,42 @@ function verificar_palabra() {
     posicion["columna"] = 0;
     // resetear la palabra del usuario
     PalUsuario = "";
+    
+    // inicia temporizador por cada intento 
+    startTimer();
     return;
   }
+}
+
+function startTimer() {
+  // 1. Limpia cualquier temporizador anterior (evita tictacs duplicados)
+  clearInterval(timerInterval);
+
+  // 2. Resetea el tiempo y el HTML
+  timeLeft = 60;
+  timerElement.textContent = timeLeft;
+  // timerElement.parentElement.classList.remove("warning"); // (Para estilos de aviso)
+
+  // 3. Inicia el nuevo "tictac" (cada 1000ms = 1 segundo)
+  timerInterval = setInterval(() => {
+    timeLeft--; // Resta un segundo
+    timerElement.textContent = timeLeft; // Actualiza el HTML
+
+    // (Opcional: Añadir clase de aviso)
+    // if (timeLeft <= 10) {
+    //   timerElement.parentElement.classList.add("warning");
+    // }
+
+    // 4. Si el tiempo llega a 0
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval); // Detiene el reloj
+      
+      // Lógica de derrota por tiempo (según rúbrica DWC)
+      document.getElementById("mensaje").innerText = "¡Se acabó el tiempo!";
+      finDePartida("¡HAS PERDIDO!"); // Llama al modal
+      estadoPartida = true; // Bloquea el juego
+    }
+  }, 1000);
 }
 
 // Abrir pop up fin de partida
@@ -215,7 +233,7 @@ let popup = document.getElementById("finPartida");
 let resultadoPartida = document.getElementById("resultadoPartida");
 
 function finDePartida(resultado) {
-  resultadoPartida.innerText = resultado;
+  resultadoPartida.innerText = resultado
 
   setTimeout(() => {
     popup.showModal();
@@ -234,5 +252,6 @@ function jugarDeNuevo() {
     }
   }
   iniciarJuego();
+  startTimer()
   popup.close();
 }
