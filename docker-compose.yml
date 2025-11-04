@@ -1,0 +1,45 @@
+version: '3.8'
+services:
+  app:
+    build: ./backend
+    container_name: lingo_app
+    ports:
+      - "8080:80"
+    volumes:
+      - ./backend:/var/www/html
+    depends_on:
+      - db
+    networks:
+      - lingonet
+
+  db:
+    image: mysql:8.0
+    container_name: lingo_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: lingoverse
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: laravel123
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - lingonet
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: lingo_phpmyadmin
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: root
+    depends_on:
+      - db
+    networks:
+      - lingonet
+
+networks:
+  lingonet:
+
+volumes:
+  db_data:

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LINGO</title>
+  <link rel="stylesheet" href="./css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+  <header>
+    <div>
+      <h1>LINGO</h1>
+      <nav>
+        <button class="nav-btn"><i class="fa-solid fa-user"></i></button>
+        <button class="nav-btn"><i class="fa-solid fa-chart-line"></i></button>
+        <button class="nav-btn"><i class="fa-solid fa-gear"></i></button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="juego">
+      <!-- TABLERO -->
+      <div class="tablero" id="tablero">
+        <div class="fila-palabra">
+          <div id="celda_1_1" class="celda"></div>
+          <div id="celda_1_2" class="celda"></div>
+          <div id="celda_1_3" class="celda"></div>
+          <div id="celda_1_4" class="celda"></div>
+          <div id="celda_1_5" class="celda"></div>
+        </div>
+        <div class="fila-palabra">
+          <div id="celda_2_1" class="celda"></div>
+          <div id="celda_2_2" class="celda"></div>
+          <div id="celda_2_3" class="celda"></div>
+          <div id="celda_2_4" class="celda"></div>
+          <div id="celda_2_5" class="celda"></div>
+        </div>
+        <div class="fila-palabra">
+          <div id="celda_3_1" class="celda"></div>
+          <div id="celda_3_2" class="celda"></div>
+          <div id="celda_3_3" class="celda"></div>
+          <div id="celda_3_4" class="celda"></div>
+          <div id="celda_3_5" class="celda"></div>
+        </div>
+        <div class="fila-palabra">
+          <div id="celda_4_1" class="celda"></div>
+          <div id="celda_4_2" class="celda"></div>
+          <div id="celda_4_3" class="celda"></div>
+          <div id="celda_4_4" class="celda"></div>
+          <div id="celda_4_5" class="celda"></div>
+        </div>
+        <div class="fila-palabra">
+          <div id="celda_5_1" class="celda"></div>
+          <div id="celda_5_2" class="celda"></div>
+          <div id="celda_5_3" class="celda"></div>
+          <div id="celda_5_4" class="celda"></div>
+          <div id="celda_5_5" class="celda"></div>
+        </div>
+      </div>
+
+      <div class="reloj">
+        <h2>Tiempo restante: <span class="tiempoRestante">01:00</span></h1>
+      </div>
+      <!-- TECLADO -->
+      <div class="teclado" id="teclado">
+        <div class="fila">
+          <button id="teclaQ">Q</button><button id="teclaW">W</button><button id="teclaE">E</button><button
+            id="teclaR">R</button><button id="teclaT">T</button> <button id="teclaY">Y</button><button
+            id="teclaU">U</button><button id="teclaI">I</button><button id="teclaO">O</button><button
+            id="teclaP">P</button>
+        </div>
+        <div class="fila">
+          <button id="teclaA">A</button><button id="teclaS">S</button><button id="teclaD">D</button><button
+            id="teclaF">F</button><button id="teclaG">G</button> <button id="teclaH">H</button><button
+            id="teclaJ">J</button><button id="teclaK">K</button><button id="teclaL">L</button>
+        </div>
+        <div class="fila">
+          <button id="enter" class="accion">⏎</button>
+          <button id="teclaZ">Z</button><button id="teclaX">X</button><button id="teclaC">C</button><button
+            id="teclaV">V</button><button id="teclaB">B</button> <button id="teclaN">N</button><button
+            id="teclaM">M</button>
+          <button id="borrar" class="accion">⌫</button>
+        </div>
+      </div>
+
+      <div id="mensaje" class="mensaje">
+        
+      </div>
+    </section>
+  </main>
+  <dialog id="finPartida">
+    <h1>Fin de la partida</h1>
+    <h2 id="resultadoPartida">(resutlado)</h2>
+    <p>idea de texto aleatorio en funcion de victoria o derrota</p>
+    <div>
+      <button type="button" onclick="jugarDeNuevo()">Jugar de nuevo</button>
+      <button type="button">Estadisticas</button>
+      <button type="button">Ver perfil</button>
+    </div>
+  </dialog>
+  <footer>
+    <p>By Javier Alcate</p>
+  </footer>
+
+  <script src="./js/javascript.js"></script>
+</body>
+
+</html>
