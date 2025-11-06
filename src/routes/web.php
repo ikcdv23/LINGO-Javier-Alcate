@@ -2,21 +2,18 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\PalabraController; // <-- Asegúrate de importar tu controlador
+use App\Http\Controllers\PalabraController;
+use App\Http\Controllers\PartidaController; // <-- ¡Importa el nuevo controlador!
 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-|
-| Aquí es donde puedes registrar las rutas web para tu aplicación.
-|
 */
 
-// --- RUTA DE INICIO (Del PDF 10) ---
-// Modifica la ruta raíz para que muestre tu vista 'lingo.welcome'
+// --- RUTA DE INICIO ---
 Route::get('/', function () {
-    return view('lingo.welcome'); // [cite: 370, 371]
+    return view('lingo.welcome');
 });
 
 // --- RUTAS DEL DASHBOARD (De Breeze) ---
@@ -31,28 +28,25 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// --- RUTAS DE PALABRAS (Del PDF 4 y 7) ---
+// --- RUTAS DE PALABRAS ---
+Route::get('/palabras', [PalabraController::class, 'index'])->name('palabras.index');
+Route::get('/palabrasStyled', [PalabraController::class, 'indexStyled'])->name('palabras.indexStyled');
+Route::get('/palabrasBlade', [PalabraController::class, 'indexBlade'])->name('palabras.indexBlade');
+Route::get('/palabrasRandom/{cantidad?}', [PalabraController::class, 'indexRandom'])->name('palabras.indexRandomw');
 
-// Ruta que devuelve todas las palabras (PDF 4)
-Route::get('/palabras', [PalabraController::class, 'index'])->name('palabras.index'); // [cite: 109, 110, 111]
+// --- RUTA API PARA VERIFICAR PALABRA ---
+Route::get('/verificarPalabra/{palabra}', [PalabraController::class, 'verificarPalabra'])
+    ->middleware(['auth', 'verified'])
+    ->name('palabras.verificarPalabra');
 
-// Ruta que devuelve todas las palabras con estilos (PDF 4)
-Route::get('/palabrasStyled', [PalabraController::class, 'indexStyled'])->name('palabras.indexStyled');// [cite: 112, 113]
+// --- RUTAS DEL RANKING Y PARTIDAS ---
+Route::get('/ranking', [PartidaController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('ranking.index');
 
-// Ruta que devuelve todas las palabras con layout (PDF 4)
-Route::get('/palabrasBlade', [PalabraController::class, 'indexBlade'])->name('palabras.indexBlade'); // [cite: 114, 115]
-
-// Ruta que devuelve palabras aleatorias (PDF 7)
-Route::get('/palabrasRandom/{cantidad?}', [PalabraController::class, 'indexRandom'])->name('palabras.indexRandomw');// [cite: 484, 485]
-
-
-// --- RUTA API PARA VERIFICAR (Del PDF 9) ---
-// ¡La más importante para el juego!
-Route::get('/verificarPalabra/{palabra}', [PalabraController::class, 'verificarPalabra']) // [cite: 261]
-    ->middleware(['auth', 'verified']) // [cite: 262]
-    ->name('palabras.verificarPalabra'); // [cite: 263]
-
+Route::post('/partidas', [PartidaController::class, 'store'])
+    ->middleware(['auth', 'verified'])
+    ->name('partidas.store');
 
 // --- RUTAS DE AUTENTICACIÓN (De Breeze) ---
-// Esto incluye las rutas de login, registro, etc.
 require __DIR__.'/auth.php';
