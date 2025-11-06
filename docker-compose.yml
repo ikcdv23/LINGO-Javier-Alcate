@@ -1,45 +1,78 @@
-version: '3.8'
 services:
-  app:
-    build: ./backend
-    container_name: lingo_app
-    ports:
-      - "8080:80"
+  # ----------------------------------------------------
+  # 1. SERVICIO DE APLICACIÓN WEB (PHP-Apache)
+  # ----------------------------------------------------
+  web:
+    build:
+      context: ./docker/php
+    container_name: laravel-apache
+    restart: unless-stopped
     volumes:
-      - ./backend:/var/www/html
+      - ./src:/var/www/html
+    ports:
+      - "80:80"
+      # --- El puerto de Vite ya no va aquí ---
     depends_on:
       - db
     networks:
-      - lingonet
+      - laravel_network
 
+  # ----------------------------------------------------
+  # 2. SERVICIO DE BASE DE DATOS (MySQL)
+  # ----------------------------------------------------
   db:
     image: mysql:8.0
-    container_name: lingo_db
+    container_name: laravel-mysql
+    # ... (el resto de tu config de db) ...
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: lingoverse
-      MYSQL_USER: laravel
-      MYSQL_PASSWORD: laravel123
+      MYSQL_ROOT_PASSWORD: root_password_segura
+      MYSQL_DATABASE: laravel_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user_password_segura
     volumes:
-      - db_data:/var/lib/mysql
+      - dbdata:/var/lib/mysql
     networks:
-      - lingonet
+      - laravel_network
 
+  # ----------------------------------------------------
+  # 3. SERVICIO DE GESTIÓN DE BASES DE DATOS (phpMyAdmin)
+  # ----------------------------------------------------
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    container_name: lingo_phpmyadmin
+    container_name: laravel-phpmyadmin
+    # ... (el resto de tu config de phpmyadmin) ...
     ports:
-      - "8081:80"
+      - "8080:80"
     environment:
       PMA_HOST: db
-      MYSQL_ROOT_PASSWORD: root
+      PMA_PORT: 3306 
     depends_on:
       - db
     networks:
-      - lingonet
+      - laravel_network
 
+  # ----------------------------------------------------
+  # 4. SERVICIO DE NODE (VITE) - ¡AHORA INDENTADO!
+  # ----------------------------------------------------
+  node:
+    image: node:22
+    container_name: laravel-vite
+    working_dir: /var/www/html
+    volumes:
+      - ./src:/var/www/html
+    ports:
+      # --- ¡El puerto de Vite AHORA VA AQUÍ! ---
+      - "5173:5173"
+    networks:
+      - laravel_network
+    command: sh -c "npm install && npm run dev --host"
+
+# ----------------------------------------------------
+# 5. REDES Y VOLÚMENES
+# ----------------------------------------------------
 networks:
-  lingonet:
+  laravel_network:
+    driver: bridge
 
 volumes:
-  db_data:
+  dbdata:

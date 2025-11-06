@@ -183,7 +183,7 @@ function verificar_palabra() {
   if (contadorLetrasBien < 5) {
     //
     contadorLetrasBien = 0;
-    document.getElementById("mensaje").innerText = "Palabra incorrecta tete";
+    document.getElementById("mensaje").innerText = "Palabra incorrecta";
 
     // pasa a la siguiente fila
     posicion["fila"]++;
