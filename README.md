@@ -1,66 +1,88 @@
-##Prerrequisitos
+# LINGOverse (Reto 1 - DAW)
+
+Este proyecto es una implementación del juego Lingo construido con Laravel 12 y Docker, siguiendo los requisitos del reto de 1ª Evaluación.
+
+La rama `main` contiene la configuración inicial y la rama `dev` contiene la integración del juego y el sistema de ranking.
+
+---
+
+## 📋 Prerrequisitos
 
 * [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 
 ---
 
-##  Instrucciones de Instalación (Puesta en Marcha)
+## ⚙️ Instrucciones de Puesta en Marcha (Desde Cero)
 
-Esta guía es para levantar el proyecto desde cero en un nuevo entorno (ej. en clase).
+Esta guía es para levantar el proyecto completo (rama `dev`) en un nuevo entorno.
 
 **1. Clonar el Repositorio**
-En tu terminal, clona el proyecto.
 ```bash
 git clone [https://github.com/ikcdv23/LINGO-Javier-Alcate.git](https://github.com/ikcdv23/LINGO-Javier-Alcate.git)
 cd LINGO-Javier-Alcate
 ```
 
-**2. Levantar los Contenedores**
-Este comando leerá el `docker-compose.yml` y construirá todos los contenedores (`web`, `db`, `phpmyadmin` y `node`). El contenedor `node` ejecutará automáticamente `npm install` y `npm run dev`.
+**2. Cambiar a la Rama de Desarrollo**
+Todo el trabajo del juego está en la rama `dev`.
+```bash
+git checkout dev
+```
+
+**3. Levantar TODOS los Contenedores**
+Este comando leerá el `docker-compose.yml` y levantará:
+* `laravel-apache` (El servidor web PHP)
+* `laravel-mysql` (La base de datos)
+* `laravel-phpmyadmin` (El gestor de BBDD)
+* `laravel-vite` (El servidor `npm run dev` automático)
+
 ```bash
 docker-compose up -d --build
 ```
-*(Espera a que termine. La primera vez puede tardar unos minutos en descargar las imágenes y construir el contenedor `web`).*
+*(Espera ~1 minuto a que todos los contenedores arranquen. El contenedor `laravel-vite` ejecutará `npm install` y `npm run dev` por ti).*
 
-**3. Configurar el Entorno (`.env`)**
-El archivo `.env` (con los secretos) no está en Git. Debemos crearlo a partir del ejemplo:
+**4. Configurar el Entorno (`.env`)**
+Copia el archivo de ejemplo para crear tu archivo de secretos:
 ```bash
 docker-compose exec web cp .env.example .env
 ```
 
-**4. Instalar Dependencias de PHP (Composer)**
-La carpeta `vendor/` tampoco está en Git. Este comando la crea instalando las librerías de PHP:
+**5. Instalar Dependencias de PHP (Composer)**
+Instala todas las librerías de Laravel (la carpeta `vendor/`):
 ```bash
 docker-compose exec web composer install
 ```
 
-**5. Generar la Clave de la Aplicación**
-El nuevo `.env` no tiene una clave de seguridad. Este comando la generará:
+**6. Generar la Clave de la Aplicación**
+El `.env` necesita una clave de seguridad única:
 ```bash
 docker-compose exec web php artisan key:generate
 ```
 
-**6. Ejecutar las Migraciones**
-Ahora, crea toda la estructura de la base de datos (tablas `users`, `palabras`, `partidas`, etc.):
+**7. Ejecutar las Migraciones**
+Crea todas las tablas en la base de datos (`users`, `palabras`, `partidas`, `password_resets`, etc.):
 ```bash
 docker-compose exec web php artisan migrate
 ```
 
-**7. Poblar el Diccionario (Paso Manual)**
-La base de datos está vacía. Necesitamos importar las palabras.
+**8. Poblar el Diccionario (Paso Manual)**
+La tabla `palabras` está vacía. Vamos a llenarla.
 1.  Abre phpMyAdmin en tu navegador: **`http://localhost:8080`**
 2.  Inicia sesión:
     * **Servidor:** `db`
     * **Usuario:** `root`
     * **Contraseña:** `root_password_segura`
-3.  Haz clic en la base de datos `laravel_db` (a la izquierda).
+3.  En la lista de la izquierda, haz clic en la base de datos `laravel_db`.
 4.  Ve a la pestaña **"Importar"**.
-5.  Selecciona el archivo `5_insertPalabras.sql` de tu proyecto y haz clic en "Importar".
+5.  Haz clic en "Seleccionar archivo" y busca el archivo `5_insertPalabras.sql` en tu proyecto.
+6.  Baja y haz clic en **"Importar"**.
 
 ---
-Listo
 
-* **Tu Juego:** `http://localhost`
-* **Tu Base de Datos:** `http://localhost:8080`
+## 🎮 ¡Listo!
 
-(Recuerda que el servidor de Vite ya está corriendo gracias al contenedor `node`, así que no necesitas ejecutar `npm run dev` manualmente).
+Ya está todo funcionando:
+
+* **Aplicación Lingo:** `http://localhost`
+* **Gestor de BBDD:** `http://localhost:8080`
+
+(No necesitas ejecutar `npm run dev`, el contenedor `laravel-vite` ya lo está haciendo por ti).
