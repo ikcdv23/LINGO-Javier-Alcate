@@ -1,19 +1,16 @@
 /* ======================================= */
 /* 0. CONFIGURACIÓN GLOBAL Y RESET BÁSICO  */
 /* ======================================= */
-
 body {
-  /* Fuente moderna y estética limpia */
-  font-family: "Poppins", sans-serif;
-  background-color: #e9f9fb; /* Fondo muy claro (azul/cian pastel) */
-  color: #1b1f22; /* Texto principal (casi negro) */
-  margin: 0;
-  padding: 0;
-  /* Configuración para centrar contenido verticalmente */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 100vh;
+    font-family: "Poppins", sans-serif;
+    background-color: #e9f9fb;
+    color: #1b1f22;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 /* ======================================= */
@@ -21,108 +18,116 @@ body {
 /* ======================================= */
 
 header {
-  width: 100%;
-  text-align: center;
-  background: #c0f1f6; /* Fondo de la cabecera */
-  padding: 15px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    text-align: center;
+    background: #c0f1f6; /* Fondo de la cabecera */
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 header div {
-  /* Contenedor para alinear elementos internos (título y nav) */
-  display: flex;
-  align-items: center;
-  flex-direction: row;
-  justify-content: space-around;
+    /* Contenedor para alinear elementos internos (título y nav) */
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-around;
 }
 
 header h1 {
-  margin: 10px;
-  font-size: 2rem;
-  font-weight: 600;
-  color: #138d97; /* Color de acento para el título */
-  letter-spacing: 1px;
+    margin: 10px;
+    font-size: 2rem;
+    font-weight: 600;
+    color: #138d97; /* Color de acento para el título */
+    letter-spacing: 1px;
 }
 
 nav {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
 }
 
 .nav-btn {
-  background: none;
-  border: 2px solid #138d97;
-  border-radius: 6px;
-  padding: 0.4rem 1rem;
-  color: #138d97;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
+    background: none;
+    border: 2px solid #138d97;
+    border-radius: 6px;
+    padding: 0.4rem 1rem;
+    color: #138d97;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
 .nav-btn:hover {
-  background: #138d97;
-  color: white;
+    background: #138d97;
+    color: white;
 }
 
 /* ======================================= */
 /* 2. ZONA DE JUEGO (TABLERO y CELDAS)     */
 /* ======================================= */
 
+#mainJuego {
+    /* Permite que ocupe todo el ancho disponible para centrar sus hijos, 
+     pero sin forzar un crecimiento excesivo en escritorio */
+    width: 100%;
+    display: flex;
+    justify-content: center; /* Asegura que el contenedor .juego se centre */
+}
+
 .juego {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 2rem;
 }
 
 .tablero {
-  /* Estructura GRID para el tablero (6 filas, celdas definidas en fila-palabra) */
-  display: grid;
-  grid-template-rows: repeat(6, 1fr);
-  gap: 0.4rem;
+    /* Estructura GRID para el tablero (6 filas, celdas definidas en fila-palabra) */
+    display: grid;
+    grid-template-rows: repeat(6, 1fr);
+    gap: 0.4rem;
 }
 
 .fila-palabra {
-  /* Estructura GRID para las celdas de cada palabra (5 columnas) */
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 0.4rem;
+    /* Estructura GRID para las celdas de cada palabra (5 columnas) */
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.4rem;
 }
 
 .celda {
-  width: 3rem;
-  height: 3rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  font-weight: 600;
-  border: 2px solid #b8dce0;
-  text-transform: uppercase;
-  border-radius: 5px;
-  background: white;
-  transition: all 0.2s ease;
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 600;
+    border: 2px solid #b8dce0;
+    text-transform: uppercase;
+    border-radius: 5px;
+    background: white;
+    transition: all 0.2s ease;
 }
 
 /* 2.1. COLORES DE ESTADO DE CELDAS */
 .correcta {
-  background-color: #2ecc71; /* Verde */
-  color: white;
-  border-color: #2ecc71;
+    background-color: #2ecc71; /* Verde */
+    color: white;
+    border-color: #2ecc71;
 }
 
 .presente {
-  background-color: #f1c40f; /* Amarillo */
-  color: white;
-  border-color: #f1c40f;
+    background-color: #f1c40f; /* Amarillo */
+    color: white;
+    border-color: #f1c40f;
 }
 
 .incorrecta {
-  background-color: #95a5a6; /* Gris */
-  color: white;
-  border-color: #95a5a6;
+    background-color: #95a5a6; /* Gris */
+    color: white;
+    border-color: #95a5a6;
 }
 
 /* ======================================= */
@@ -130,41 +135,41 @@ nav {
 /* ======================================= */
 
 .teclado {
-  margin-top: 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
 .teclado .fila {
-  display: flex;
-  justify-content: center;
-  gap: 0.3rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.3rem;
 }
 
 .teclado button {
-  background: #c0f1f6;
-  border: 2px solid #7fdbe0;
-  border-radius: 6px;
-  padding: 0.6rem;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  color: #045b61; /* Color de texto oscuro */
-  width: 2.2rem;
-  transition: all 0.1s ease;
+    background: #c0f1f6;
+    border: 2px solid #7fdbe0;
+    border-radius: 6px;
+    padding: 0.6rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    color: #045b61; /* Color de texto oscuro */
+    width: 2.2rem;
+    transition: all 0.1s ease;
 }
 
 .teclado button:hover {
-  background: #7fdbe0;
-  color: white;
+    background: #7fdbe0;
+    color: white;
 }
 
 .teclado button.accion {
-  /* Estilo para botones especiales como 'Enter' */
-  background: #045b61;
-  color: white;
-  border-color: #045b61;
+    /* Estilo para botones especiales como 'Enter' */
+    background: #045b61;
+    color: white;
+    border-color: #045b61;
 }
 
 /* ======================================= */
@@ -172,18 +177,19 @@ nav {
 /* ======================================= */
 
 .mensaje {
-  margin-top: 1.5rem;
-  font-weight: 600;
-  color: #045b61;
-  min-height: 1.5rem; /* Reserva espacio para evitar saltos */
-  transition: opacity 0.3s;
+    margin-top: 1.5rem;
+    font-weight: 600;
+    color: #045b61;
+    min-height: 1.5rem; /* Reserva espacio para evitar saltos */
+    transition: opacity 0.3s;
 }
 
 footer {
-  margin-top: auto; /* Empuja el footer hacia la parte inferior */
-  padding: 1rem;
-  font-size: 0.9rem;
-  color: #5a7072;
+    padding: 1rem;
+    font-size: 0.9rem;
+    color: #5a7072;
+    display: flex;
+    justify-content: center;
 }
 
 /* ======================================= */
@@ -192,313 +198,480 @@ footer {
 
 /* Estilo base para el elemento dialog, a mejorar por los ID específicos */
 dialog {
-  padding: 10px;
-  margin: 20px;
-  background-color: #7fdbe0;
-  border: 1px #045b61;
-  border-radius: 20px;
+    padding: 10px;
+    margin: 20px;
+    background-color: #7fdbe0;
+    border: 1px #045b61;
+    border-radius: 20px;
 }
 
 /* Animación para modales (reutilizable) */
 @keyframes fadeInScale {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 /* 5.1. MODAL FIN DE PARTIDA */
 dialog#finPartida {
-  background: white;
-  border: 2px solid #045b61;
-  border-radius: 12px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  padding: 1.5rem 2rem;
-  min-width: 320px;
-  max-width: 90%;
-  text-align: center;
-  margin: auto;
-  animation: fadeInScale 0.3s ease-out forwards;
+    background: white;
+    border: 2px solid #045b61;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    padding: 1.5rem 2rem;
+    min-width: 320px;
+    max-width: 90%;
+    text-align: center;
+    margin: auto;
+    animation: fadeInScale 0.3s ease-out forwards;
 }
 
 dialog#finPartida::backdrop {
-  background: rgba(4, 91, 97, 0.6);
-  backdrop-filter: blur(3px);
+    background: rgba(4, 91, 97, 0.6);
+    backdrop-filter: blur(3px);
 }
 
 dialog#finPartida h1 {
-  color: #045b61;
-  font-size: 1.6rem;
-  margin-top: 0;
-  margin-bottom: 0.5rem;
+    color: #045b61;
+    font-size: 1.6rem;
+    margin-top: 0;
+    margin-bottom: 0.5rem;
 }
 
 dialog#finPartida h2#resultadoPartida {
-  color: #138d97;
-  font-size: 1.3rem;
-  margin-top: 0;
-  margin-bottom: 1rem;
+    color: #138d97;
+    font-size: 1.3rem;
+    margin-top: 0;
+    margin-bottom: 1rem;
 }
 
 dialog#finPartida p {
-  color: #1b1f22;
-  font-size: 0.9rem;
+    color: #1b1f22;
+    font-size: 0.9rem;
 }
 
 dialog#finPartida div {
-  /* Contenedor de botones */
-  margin-top: 2rem;
-  display: flex;
-  flex-direction: column; /* Apilados por defecto */
-  justify-content: center;
-  gap: 0.75rem;
+    /* Contenedor de botones */
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column; /* Apilados por defecto */
+    justify-content: center;
+    gap: 0.75rem;
 }
 
 dialog#finPartida button {
-  /* Reutiliza estilo similar a .nav-btn */
-  background: none;
-  border: 2px solid #138d97;
-  border-radius: 6px;
-  padding: 0.5rem 1rem;
-  color: #138d97;
-  font-family: "Poppins", sans-serif;
-  font-weight: 500;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
+    /* Reutiliza estilo similar a .nav-btn */
+    background: none;
+    border: 2px solid #138d97;
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    color: #138d97;
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
 dialog#finPartida button:hover {
-  background: #138d97;
-  color: white;
+    background: #138d97;
+    color: white;
 }
 
 /* 5.2. MODAL ESTADÍSTICAS */
 dialog#modalEstadisticas {
-  background: white;
-  border: 2px solid #045b61;
-  border-radius: 12px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  padding: 1.5rem 2rem;
-  min-width: 320px;
-  max-width: 90%;
-  text-align: center;
-  margin: auto;
-  animation: fadeInScale 0.3s ease-out forwards;
+    background: white;
+    border: 2px solid #045b61;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    padding: 1.5rem 2rem;
+    min-width: 320px;
+    max-width: 90%;
+    text-align: center;
+    margin: auto;
+    animation: fadeInScale 0.3s ease-out forwards;
 }
 
 dialog#modalEstadisticas::backdrop {
-  background: rgba(4, 91, 97, 0.6);
-  backdrop-filter: blur(3px);
+    background: rgba(4, 91, 97, 0.6);
+    backdrop-filter: blur(3px);
 }
 
 dialog#modalEstadisticas header {
-  /* Estilo para la cabecera del modal de estadísticas */
-  border-bottom: 2px solid #c0f1f6;
-  padding-bottom: 1rem;
-  margin-bottom: 1.5rem;
-  width: auto;
+    /* Estilo para la cabecera del modal de estadísticas */
+    border-bottom: 2px solid #c0f1f6;
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    width: auto;
 }
 
 dialog#modalEstadisticas header h2 {
-  color: #045b61;
-  font-size: 1.6rem;
-  margin: 0;
+    color: #045b61;
+    font-size: 1.6rem;
+    margin: 0;
 }
 
 dialog#modalEstadisticas .stats-list {
-  /* Lista sin viñetas y con Flexbox */
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  text-align: left;
+    /* Lista sin viñetas y con Flexbox */
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    text-align: left;
 }
 
 dialog#modalEstadisticas .stats-list li {
-  /* Fila individual de estadística */
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #e9f9fb;
-  padding: 0.75rem 1rem;
-  border-radius: 6px;
-  border: 2px solid #c0f1f6;
+    /* Fila individual de estadística */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #e9f9fb;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    border: 2px solid #c0f1f6;
 }
 
 dialog#modalEstadisticas .stats-list li strong {
-  font-weight: 600;
-  font-size: 1.2rem;
-  color: #138d97;
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: #138d97;
 }
 
 dialog#modalEstadisticas footer {
-  margin-top: 2rem;
+    margin-top: 2rem;
 }
 
 dialog#modalEstadisticas .btn-cerrar {
-  /* Botón de cierre primario */
-  background: #138d97;
-  color: white;
-  border: 2px solid #138d97;
-  border-radius: 6px;
-  padding: 0.5rem 1.5rem;
-  font-family: "Poppins", sans-serif;
-  font-weight: 500;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
+    /* Botón de cierre primario */
+    background: #138d97;
+    color: white;
+    border: 2px solid #138d97;
+    border-radius: 6px;
+    padding: 0.5rem 1.5rem;
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
 dialog#modalEstadisticas .btn-cerrar:hover {
-  background: #045b61;
-  border-color: #045b61;
+    background: #045b61;
+    border-color: #045b61;
 }
 /* ======================================= */
 /* 5.3. MODAL DE INICIO Y REGLAS (dialog#modalInicio) */
 /* ======================================= */
 
 dialog#modalInicio {
-  /* Reutiliza el estilo base de los otros modales */
-  background: white;
-  border: 2px solid #045b61;
-  border-radius: 12px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  padding: 1.5rem 2rem;
-  min-width: 350px;
-  max-width: 90%;
-  text-align: center;
-  margin: auto;
+    /* Reutiliza el estilo base de los otros modales */
+    background: white;
+    border: 2px solid #045b61;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    padding: 1.5rem 2rem;
+    min-width: 350px;
+    max-width: 90%;
+    text-align: center;
+    margin: auto;
 
-  animation: fadeInScale 0.3s ease-out forwards;
+    animation: fadeInScale 0.3s ease-out forwards;
 }
 dialog#modalInicio header {
-  width: auto;
+    width: auto;
 }
 dialog#modalInicio::backdrop {
-  background: rgba(4, 91, 97, 0.6);
-  backdrop-filter: blur(3px);
+    background: rgba(4, 91, 97, 0.6);
+    backdrop-filter: blur(3px);
 }
 
 dialog#modalInicio header h2 {
-  color: #045b61;
-  font-size: 1.8rem;
-  margin-bottom: 0.5rem;
+    color: #045b61;
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
 }
 
 dialog#modalInicio header p {
-  color: #138d97;
-  font-weight: 500;
+    color: #138d97;
+    font-weight: 500;
 }
 
 /* Estilos para la sección de reglas */
 dialog#modalInicio .reglas {
-  text-align: left;
-  margin-top: 1.5rem;
-  border-top: 1px solid #c0f1f6;
-  padding-top: 1rem;
+    text-align: left;
+    margin-top: 1.5rem;
+    border-top: 1px solid #c0f1f6;
+    padding-top: 1rem;
 }
 
 dialog#modalInicio .reglas h3 {
-  color: #045b61;
-  margin-top: 0.5rem;
-  font-size: 1.2rem;
+    color: #045b61;
+    margin-top: 0.5rem;
+    font-size: 1.2rem;
 }
 
 dialog#modalInicio .reglas ul {
-  list-style: disc; /* Usar viñetas estándar */
-  margin-left: 20px;
-  padding-left: 0;
-  font-size: 0.95rem;
+    list-style: disc; /* Usar viñetas estándar */
+    margin-left: 20px;
+    padding-left: 0;
+    font-size: 0.95rem;
 }
 
 /* Estilos de ejemplo (simulando el tablero) */
 dialog#modalInicio .ejemplos {
-  margin-top: 2rem;
-  padding: 1rem;
-  background-color: #e9f9fb; /* Fondo suave */
-  border-radius: 8px;
+    margin-top: 2rem;
+    padding: 1rem;
+    background-color: #e9f9fb; /* Fondo suave */
+    border-radius: 8px;
 }
 
 dialog#modalInicio .ejemplos h4 {
-  text-align: center;
-  color: #1b1f22;
-  margin-top: 0;
+    text-align: center;
+    color: #1b1f22;
+    margin-top: 0;
 }
 
 dialog#modalInicio .fila-ejemplo {
-  display: flex;
-  justify-content: center;
-  gap: 0.4rem;
-  margin: 0.5rem 0;
+    display: flex;
+    justify-content: center;
+    gap: 0.4rem;
+    margin: 0.5rem 0;
 }
 
 /* Reutilizar las celdas, pero más pequeñas para el ejemplo */
 dialog#modalInicio .fila-ejemplo .celda {
-  /* Hereda .celda de la configuración global */
-  width: 2rem;
-  height: 2rem;
-  font-size: 1.2rem;
-  opacity: 1 !important; /* Asegurar que no hay animaciones pendientes */
+    /* Hereda .celda de la configuración global */
+    width: 2rem;
+    height: 2rem;
+    font-size: 1.2rem;
+    opacity: 1 !important; /* Asegurar que no hay animaciones pendientes */
 }
 
 dialog#modalInicio .ejemplos p {
-  font-size: 0.85rem;
-  text-align: center;
-  margin-top: 0.5rem;
-  color: #5a7072;
+    font-size: 0.85rem;
+    text-align: center;
+    margin-top: 0.5rem;
+    color: #5a7072;
 }
 
 /* Botón principal para empezar */
 dialog#modalInicio .btn-empezar {
-  /* Estilo primario (coherente con .accion o .btn-cerrar) */
-  background: #138d97;
-  color: white;
-  border: 2px solid #138d97;
-  border-radius: 6px;
-  padding: 0.75rem 2rem;
-  font-family: "Poppins", sans-serif;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  margin-top: 1.5rem;
-  transition: all 0.2s ease;
+    /* Estilo primario (coherente con .accion o .btn-cerrar) */
+    background: #138d97;
+    color: white;
+    border: 2px solid #138d97;
+    border-radius: 6px;
+    padding: 0.75rem 2rem;
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 1.5rem;
+    transition: all 0.2s ease;
 }
 
 dialog#modalInicio .btn-empezar:hover {
-  background: #045b61; /* Hover más oscuro */
-  border-color: #045b61;
+    background: #045b61; /* Hover más oscuro */
+    border-color: #045b61;
+}
+
+/* ======================================= */
+/* 5.4. MODAL DE PERFIL (dialog#perfilModal) */
+/* ======================================= */
+
+dialog#perfilModal {
+    background: white;
+    border: 2px solid #045b61;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    padding: 1.5rem 2rem;
+    min-width: 320px;
+    max-width: 90%;
+    text-align: center;
+    margin: auto;
+    animation: fadeInScale 0.3s ease-out forwards;
+}
+
+dialog#perfilModal::backdrop {
+    background: rgba(4, 91, 97, 0.6);
+    backdrop-filter: blur(3px);
+}
+
+dialog#perfilModal h2 {
+    color: #045b61;
+    font-size: 1.6rem;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid #c0f1f6;
+    padding-bottom: 1rem;
+}
+
+/* Contenedor principal del formulario */
+dialog#perfilModal form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Enlace de perfil */
+dialog#perfilModal a {
+    display: block;
+    background: #138d97;
+    color: white;
+    text-decoration: none;
+    border: 2px solid #138d97;
+    border-radius: 6px;
+    padding: 0.75rem 1.5rem;
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+}
+
+dialog#perfilModal a:hover {
+    background: #045b61;
+    border-color: #045b61;
+    transform: translateY(-1px);
+}
+
+/* Formulario de cerrar sesión (anidado) */
+dialog#perfilModal form form {
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: none;
+}
+
+/* Botón de cerrar sesión */
+dialog#perfilModal form form button {
+    width: 100%;
+    background: #fc8181;
+    color: white;
+    border: 2px solid #fc8181;
+    border-radius: 6px;
+    padding: 0.75rem 1.5rem;
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 0.5rem;
+}
+
+dialog#perfilModal form form button:hover {
+    background: #f56565;
+    border-color: #f56565;
+    transform: translateY(-1px);
+}
+
+/* Botón de cerrar modal */
+dialog#perfilModal button[type="button"] {
+    background: #e2e8f0;
+    color: #4a5568;
+    border: 2px solid #cbd5e0;
+    border-radius: 6px;
+    padding: 0.75rem 1.5rem;
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 0.5rem;
+}
+
+dialog#perfilModal button[type="button"]:hover {
+    background: #cbd5e0;
+    border-color: #a0aec0;
+}
+
+/* Separador visual entre secciones */
+dialog#perfilModal form > *:not(:first-child) {
+    border-top: 1px solid #e2e8f0;
+    padding-top: 1rem;
+}
+
+/* Responsive para móviles */
+@media (max-width: 600px) {
+    dialog#perfilModal {
+        padding: 1rem 1.5rem;
+        min-width: 280px;
+    }
+
+    dialog#perfilModal h2 {
+        font-size: 1.4rem;
+        margin-bottom: 1rem;
+    }
+
+    dialog#perfilModal a,
+    dialog#perfilModal form form button,
+    dialog#perfilModal button[type="button"] {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+    }
 }
 
 /* ======================================= */
 /* 6. RESPONSIVE Y MEDIA QUERIES           */
 /* ======================================= */
 
+@media (min-width: 900px) {
+    /* Ajustes de tamaño para pantallas de escritorio */
+
+    /* Permite que el contenedor .juego sea un poco más grande en escritorio */
+    .juego {
+        max-width: 600px;
+    }
+
+    /* Aumentar el tamaño de las celdas para escritorio */
+    .celda {
+        width: 4rem;
+        height: 4rem;
+        font-size: 2rem;
+    }
+
+    /* Ajustar el tamaño de las teclas para que se vean mejor */
+    .teclado button {
+        width: 2.8rem;
+        padding: 0.8rem;
+        font-size: 1.1rem;
+    }
+}
+
 @media (max-width: 600px) {
-  /* Ajustes de tamaño para pantallas pequeñas (móviles) */
-  .celda {
-    width: 2.4rem;
-    height: 2.4rem;
-    font-size: 1.2rem;
-  }
+    /* Ajustes de tamaño para pantallas pequeñas (móviles) */
+    .celda {
+        width: 2.4rem;
+        height: 2.4rem;
+        font-size: 1.2rem;
+    }
 
-  .teclado button {
-    width: 2rem;
-    font-size: 0.9rem;
-  }
+    .teclado button {
+        width: 2rem;
+        font-size: 0.9rem;
+    }
 
-  header h1 {
-    font-size: 1.6rem;
-  }
+    header div {
+        /* Cambio en móvil: apilar título y nav si la pantalla es muy pequeña */
+        flex-direction: column;
+        gap: 10px;
+    }
 
-  dialog#finPartida div {
-    /* En móvil, los botones apilados (column) se ven mejor */
-    flex-direction: column;
-  }
+    header h1 {
+        font-size: 1.6rem;
+        margin-bottom: 0;
+    }
+
+    dialog#finPartida div {
+        /* En móvil, los botones apilados (column) se ven mejor */
+        flex-direction: column;
+    }
 }

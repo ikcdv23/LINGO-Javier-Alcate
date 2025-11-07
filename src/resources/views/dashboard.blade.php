@@ -3,14 +3,13 @@
     <div>
       <h1>LINGO</h1>
       <nav>
-        <button class="nav-btn"><i class="fa-solid fa-user"></i></button>
-        <button onclick="estadisticas()" class="nav-btn"><i class="fa-solid fa-chart-line"></i></button>
-        <button class="nav-btn"><i class="fa-solid fa-gear"></i></button>
+        <button id="btn-estadisticas" class="nav-btn"><i class="fa-solid fa-chart-line"></i></button>
+        <button id="btn-perfil" class="nav-btn"><i class="fa-solid fa-user"></i></button>
       </nav>
     </div>
   </header>
 
-  <main>
+  <section id="mainJuego">
     <section class="juego">
       <!-- TABLERO -->
       <div class="tablero" id="tablero">
@@ -81,124 +80,146 @@
 
       </div>
     </section>
-  </main>
-  <dialog id="finPartida">
-    <h1>Fin de la partida</h1>
-    <h2 id="resultadoPartida">(resutlado)</h2>
-    <p id="fraseResultado">idea de texto aleatorio en funcion de victoria o derrota</p>
-    <div>
-      <button type="button" onclick="jugarDeNuevo()">Jugar de nuevo</button>
-      <button onclick="estadisticas()" type="button">Estadisticas</button>
-      <button type="button">Ver perfil</button>
-    </div>
-  </dialog>
+    </main>
+    <dialog id="finPartida">
+      <h1>Fin de la partida</h1>
+      <h2 id="resultadoPartida">(resutlado)</h2>
+      <p id="fraseResultado">idea de texto aleatorio en funcion de victoria o derrota</p>
+      <div>
+        <button id="btn-jugar-de-nuevo-modal" type="button">Jugar de nuevo</button>
+        <button id="btn-estadisticas-modal" type="button">Estadisticas</button>
+        <button id="btn-perfil-modal" type="button">Ver perfil</button>
+      </div>
+    </dialog>
 
-  <dialog id="modalEstadisticas" class="estadisticas">
+    <dialog id="modalEstadisticas" class="estadisticas">
 
-    <form method="dialog">
+      <form method="dialog">
 
-      <header>
-        <h2>Estadísticas del Jugador</h2>
-        <span id="stats-username">(nombre_usuario)</span>
-      </header>
+        <header>
+          <h2>Estadísticas del Jugador</h2>
+          <span id="stats-username">(nombre_usuario)</span>
+        </header>
 
-      <ul class="stats-list">
+        <ul class="stats-list">
 
-        <li>
-          <span>Partidas Jugadas</span>
-          <strong id="stats-jugadas">0</strong>
-        </li>
-        <li>
-          <span>Victorias</span>
-          <strong id="stats-victorias">0</strong>
-        </li>
-        <li>
-          <span>Porcentaje de Victorias</span>
-          <strong id="stats-porcentaje">0%</strong>
-        </li>
-        <li>
-          <span>Racha Actual</span>
-          <strong id="stats-racha">0</strong>
-        </li>
-        <li>
-          <span>Mejor Racha</span>
-          <strong id="stats-mejor-racha">0</strong>
-        </li>
-      </ul>
-
-      <footer>
-        <button type="submit" class="btn-cerrar">Cerrar</button>
-      </footer>
-
-    </form>
-  </dialog>
-
-  <dialog id="modalInicio">
-    <div class="modal-contenido">
-      <header>
-        <h2>¡Bienvenido a LINGO!</h2>
-        <p>Aprende a jugar antes de empezar.</p>
-      </header>
-
-      <section class="reglas">
-        <h3>Objetivo</h3>
-        <p>Adivina la <span style="font-weight: bolder;"> palabra oculta </span> de 5 letras en 5 intentos.<span
-            style="font-weight: bolder;"> ¡Tienes 60 segundos por intento!</span></p>
-
-        <h3>Reglas del Juego</h3>
-        <ul>
-          <li>Cada intento debe ser una palabra válida.</li>
-          <li>Tras cada intento, el color de las letras cambiará para mostrar qué tan cerca estás de la solución.</li>
+          <li>
+            <span>Partidas Jugadas</span>
+            <strong id="stats-jugadas">0</strong>
+          </li>
+          <li>
+            <span>Victorias</span>
+            <strong id="stats-victorias">0</strong>
+          </li>
+          <li>
+            <span>Porcentaje de Victorias</span>
+            <strong id="stats-porcentaje">0%</strong>
+          </li>
+          <li>
+            <span>Racha Actual</span>
+            <strong id="stats-racha">0</strong>
+          </li>
+          <li>
+            <span>Mejor Racha</span>
+            <strong id="stats-mejor-racha">0</strong>
+          </li>
         </ul>
 
-        <div class="ejemplos">
-          <h4>Ejemplos:</h4>
-          <div class="fila-ejemplo">
-            <div class="celda correcta">C</div>
-            <div class="celda">A</div>
-            <div class="celda">S</div>
-            <div class="celda">A</div>
-            <div class="celda">R</div>
+        <footer>
+          <button type="submit" class="btn-cerrar">Cerrar</button>
+        </footer>
+
+      </form>
+    </dialog>
+
+    <dialog id="modalInicio">
+      <div class="modal-contenido">
+        <header>
+          <h2>¡Bienvenido a LINGO!</h2>
+          <p>Aprende a jugar antes de empezar.</p>
+        </header>
+
+        <section class="reglas">
+          <h3>Objetivo</h3>
+          <p>Adivina la <span style="font-weight: bolder;"> palabra oculta </span> de 5 letras en 5 intentos.<span
+              style="font-weight: bolder;"> ¡Tienes 60 segundos por intento!</span></p>
+
+          <h3>Reglas del Juego</h3>
+          <ul>
+            <li>Cada intento debe ser una palabra válida.</li>
+            <li>Tras cada intento, el color de las letras cambiará para mostrar qué tan cerca estás de la solución.</li>
+          </ul>
+
+          <div class="ejemplos">
+            <h4>Ejemplos:</h4>
+            <div class="fila-ejemplo">
+              <div class="celda correcta">C</div>
+              <div class="celda">A</div>
+              <div class="celda">S</div>
+              <div class="celda">A</div>
+              <div class="celda">R</div>
+            </div>
+            <p>La <span style="font-weight: bolder;">"C"</span> está en la palabra y en la posición <span
+                style="font-weight: bolder;  color: #2ecc71;">correcta.</span></p>
+
+            <div class="fila-ejemplo">
+              <div class="celda">P</div>
+              <div class="celda presente">A</div>
+              <div class="celda">R</div>
+              <div class="celda">E</div>
+              <div class="celda">S</div>
+            </div>
+            <p>La "A" está en la palabra, pero en la posición <span
+                style="font-weight: bolder; color: #f1c40f">incorrecta.</span>.</p>
+
+            <div class="fila-ejemplo">
+              <div class="celda">R</div>
+              <div class="celda">I</div>
+              <div class="celda incorrecta">O</div>
+              <div class="celda">S</div>
+              <div class="celda">A</div>
+            </div>
+            <p>La <span style="font-weight: bolder;"> "O" </span> no está en la palabra secreta en <span
+                style="font-weight: bolder;">ninguna posición.</span></p>
           </div>
-          <p>La <span style="font-weight: bolder;">"C"</span> está en la palabra y en la posición <span
-              style="font-weight: bolder;">correcta.</span></p>
+        </section>
 
-          <div class="fila-ejemplo">
-            <div class="celda">P</div>
-            <div class="celda presente">A</div>
-            <div class="celda">R</div>
-            <div class="celda">E</div>
-            <div class="celda">S</div>
-          </div>
-          <p>La **A** está en la palabra, pero en la posición <span
-              style="font-weight: bolder; color: #f1c40f">incorrecta.</span>.</p>
+        <footer>
+          <button id="btn-empezar-juego" class="btn-empezar">¡Entendido, Empezar a Jugar!</button>
+        </footer>
+      </div>
+    </dialog>
 
-          <div class="fila-ejemplo">
-            <div class="celda">R</div>
-            <div class="celda">I</div>
-            <div class="celda incorrecta">O</div>
-            <div class="celda">S</div>
-            <div class="celda">A</div>
-          </div>
-          <p>La <span style="font-weight: bolder;"> O </span> no está en la palabra secreta en **ninguna posición**.</p>
-        </div>
-      </section>
+    <!-- MODAL DE ADVERTENCIA AL ABANDONAR PARTIDA -->
+    <dialog class="modalAdvertencia">
+      <header>¡ESTA PARTIDA SE PERDERA!</header>
+      <main>
+        <h2>Al ejecutar esta acción abandonaras esta partida y sera necesario reiniciarla al volver.</h2>
+        <h3>¿Deseas continuar?</h3>
+        <button type="button" onclick="cerrarAdvertencia()">Cancelar</button>
+        <button type="button" onclick="reiniciarPartida()">Aceptar</button>
+      </main>
+    </dialog>
 
-      <footer>
-        <button id="btn-empezar-juego" class="btn-empezar">¡Entendido, Empezar a Jugar!</button>
-      </footer>
-    </div>
-  </dialog>
+    <!-- MODAL DE VISUALIZAZION DE PERFIL -->
+    <dialog id="perfilModal" class="perfilModal">
+      <form method="dialog" id="form-perfil">
+        <h2>Mi Cuenta</h2>
 
-  <dialog class="modalAdvertencia">
-    <header>¡ESTA PARTIDA SE PERDERA!</header>
-    <main>
-      <h3>Al ejecutar esta acción abandonaras esta partida y sera necesario </h3>
-    </main>
-  </dialog>
+        <a href="{{ route('profile.edit') }}">Perfil</a>
 
-  <footer>
-    <p>By Javier Alcate</p>
-  </footer>
+        <button id="btn-cerrar-perfil" type="button">Cerrar</button>
+      </form>
+
+      <form method="POST" action="{{ route('logout') }}" id="logout-form">
+        @csrf
+        <button type="submit" id="btn-cerrar-sesion">Cerrar sesión</button>
+      </form>
+    </dialog>
+
+
+    <footer>
+      <p>By Javier Alcate</p>
+    </footer>
 
 </x-app-layout>
