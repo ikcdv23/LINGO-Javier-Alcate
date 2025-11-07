@@ -74,7 +74,8 @@ La tabla `palabras` está vacía. Vamos a llenarla.
 3.  En la lista de la izquierda, haz clic en la base de datos `laravel_db`.
 4.  Ve a la pestaña **"Importar"**.
 5.  Haz clic en "Seleccionar archivo" y busca el archivo `5_insertPalabras.sql` en tu proyecto.
-6.  Baja y haz clic en **"Importar"**.
+   -->  https://drive.google.com/file/d/1aZQ0MqHjQtcMKxlJyjVc7MALeLXiRZG3/view
+7.  Baja y haz clic en **"Importar"**.
 
 ---
 
