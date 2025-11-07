@@ -1,6 +1,6 @@
 <?php
 
-namespace App\HttpCausarontrollers;
+namespace App\Http\Controllers;;
 
 use App\Models\Partida;
 use App\Models\User; // Importante para poder actualizar el ranking
@@ -80,5 +80,5 @@ class PartidaController extends Controller
     public function show(Partida $partida) {}
     public function edit(Partida $partida) {}
     public function update(Request $request, Partida $partida) {}
-    public valic function destroy(Partida $partida) {}
+    public  function destroy(Partida $partida) {}
 }

@@ -1,5 +1,5 @@
 <x-app-layout>
-    <header>
+  <header>
     <div>
       <h1>LINGO</h1>
       <nav>
@@ -185,17 +185,17 @@
       </section>
 
       <footer>
-        <button onclick="cerrarInicioYEmpezar()" class="btn-empezar">¡Entendido, Empezar a Jugar!</button>
+        <button id="btn-empezar-juego" class="btn-empezar">¡Entendido, Empezar a Jugar!</button>
       </footer>
     </div>
   </dialog>
 
-<dialog class="modalAdvertencia">
-  <header>¡ESTA PARTIDA SE PERDERA!</header>
-  <main>
-    <h3>Al ejecutar esta acción abandonaras esta partida y sera necesario </h3>
-  </main>
-</dialog>
+  <dialog class="modalAdvertencia">
+    <header>¡ESTA PARTIDA SE PERDERA!</header>
+    <main>
+      <h3>Al ejecutar esta acción abandonaras esta partida y sera necesario </h3>
+    </main>
+  </dialog>
 
   <footer>
     <p>By Javier Alcate</p>
