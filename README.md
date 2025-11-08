@@ -1,89 +1,106 @@
-# LINGOverse (Reto 1 - DAW)
+# 🚀 LINGOverse (Reto 1 - DAW)
 
 Este proyecto es una implementación del juego Lingo construido con Laravel 12 y Docker, siguiendo los requisitos del reto de 1ª Evaluación.
 
 La rama `main` contiene la configuración inicial y la rama `dev` contiene la integración del juego y el sistema de ranking.
 
----
+-----
 
 ## 📋 Prerrequisitos
 
-* [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+  * **Docker Desktop**
 
----
+-----
 
 ## ⚙️ Instrucciones de Puesta en Marcha (Desde Cero)
 
 Esta guía es para levantar el proyecto completo (rama `dev`) en un nuevo entorno.
 
-**1. Clonar el Repositorio**
-```bash
-git clone [https://github.com/ikcdv23/LINGO-Javier-Alcate.git](https://github.com/ikcdv23/LINGO-Javier-Alcate.git)
-cd LINGO-Javier-Alcate
-```
+### 1\. Clonar y Levantar Contenedores
 
-**2. Cambiar a la Rama de Desarrollo**
-Todo el trabajo del juego está en la rama `dev`.
-```bash
-git checkout dev
-```
+1.  **Clonar el Repositorio**
+    ```bash
+    git clone https://github.com/ikcdv23/LINGO-Javier-Alcate.git
+    cd LINGO-Javier-Alcate
+    ```
+2.  **Cambiar a la Rama de Desarrollo**
+    ```bash
+    git checkout dev
+    ```
+3.  **Levantar TODOS los Contenedores**
+    ```bash
+    docker-compose up -d --build
+    ```
+    *(Espera \~1 minuto a que todos los contenedores arranquen. El contenedor `laravel-vite` ejecutará `npm install` y `npm run dev` por ti).*
 
-**3. Levantar TODOS los Contenedores**
-Este comando leerá el `docker-compose.yml` y levantará:
-* `laravel-apache` (El servidor web PHP)
-* `laravel-mysql` (La base de datos)
-* `laravel-phpmyadmin` (El gestor de BBDD)
-* `laravel-vite` (El servidor `npm run dev` automático)
+### 2\. Configuración de Laravel y Base de Datos (¡CRÍTICO\!)
 
-```bash
-docker-compose up -d --build
-```
-*(Espera ~1 minuto a que todos los contenedores arranquen. El contenedor `laravel-vite` ejecutará `npm install` y `npm run dev` por ti).*
+#### ⚠️ IMPORTANTE: Modificar el Archivo `.env`
 
-**4. Configurar el Entorno (`.env`)**
-Copia el archivo de ejemplo para crear tu archivo de secretos:
-```bash
-docker-compose exec web cp .env.example .env
-```
+Por defecto, Laravel usa SQLite y no se conectará a MySQL. **Debes hacer este paso inmediatamente después del Paso 4.**
 
-**5. Instalar Dependencias de PHP (Composer)**
-Instala todas las librerías de Laravel (la carpeta `vendor/`):
-```bash
-docker-compose exec web composer install
-```
+1.  **Copiar el archivo de ejemplo:**
 
-**6. Generar la Clave de la Aplicación**
-El `.env` necesita una clave de seguridad única:
-```bash
-docker-compose exec web php artisan key:generate
-```
+    ```bash
+    docker-compose exec web cp .env.example .env
+    ```
 
-**7. Ejecutar las Migraciones**
-Crea todas las tablas en la base de datos (`users`, `palabras`, `partidas`, `password_resets`, etc.):
-```bash
-docker-compose exec web php artisan migrate
-```
+2.  **Abrir `src/.env` y modificar la conexión de base de datos** para que use MySQL y apunte a tu servicio `db`. Asegúrate de que las líneas de `DB_HOST`, `DB_PORT`, etc., **NO** empiecen con `#`.
 
-**8. Poblar el Diccionario (Paso Manual)**
+    ```dotenv
+    DB_CONNECTION=mysql
+    DB_HOST=db
+    DB_PORT=3306
+    DB_DATABASE=laravel_db
+    DB_USERNAME=root # Usar 'root' para phpMyAdmin o 'user' para la aplicación
+    DB_PASSWORD=root_password_segura
+
+    # Asegúrate de que la línea de abajo también apunta a la base de datos
+    SESSION_DRIVER=database
+    ```
+
+#### 🛠️ Pasos Finales de Instalación
+
+1.  **Generar la Clave de la Aplicación**
+    ```bash
+    docker-compose exec web php artisan key:generate
+    ```
+2.  **Instalar Dependencias de PHP (Composer)**
+    ```bash
+    docker-compose exec web composer install
+    ```
+3.  **Ejecutar las Migraciones**
+    Crea todas las tablas en la base de datos (`users`, `palabras`, `partidas`, etc.).
+    ```bash
+    docker-compose exec web php artisan migrate
+    ```
+4.  **Limpiar la Caché de Configuración**
+    Este paso es **obligatorio** para que Laravel olvide el modo SQLite y use MySQL.
+    ```bash
+    docker-compose exec web php artisan config:clear
+    ```
+
+### 3\. Poblar el Diccionario (Paso Manual)
+
 La tabla `palabras` está vacía. Vamos a llenarla.
+
 1.  Abre phpMyAdmin en tu navegador: **`http://localhost:8080`**
 2.  Inicia sesión:
-    * **Servidor:** `db`
-    * **Usuario:** `root`
-    * **Contraseña:** `root_password_segura`
-3.  En la lista de la izquierda, haz clic en la base de datos `laravel_db`.
+      * **Servidor:** `db`
+      * **Usuario:** `root`
+      * **Contraseña:** `root_password_segura`
+3.  En la lista de la izquierda, haz clic en la base de datos **`laravel_db`**.
 4.  Ve a la pestaña **"Importar"**.
 5.  Haz clic en "Seleccionar archivo" y busca el archivo `5_insertPalabras.sql` en tu proyecto.
-   -->  https://drive.google.com/file/d/1aZQ0MqHjQtcMKxlJyjVc7MALeLXiRZG3/view
-7.  Baja y haz clic en **"Importar"**.
+6.  Baja y haz clic en **"Importar"**.
 
----
+-----
 
-## 🎮 ¡Listo!
+## 🎮 ¡Listo\!
 
 Ya está todo funcionando:
 
-* **Aplicación Lingo:** `http://localhost`
-* **Gestor de BBDD:** `http://localhost:8080`
+  * **Aplicación Lingo:** `http://localhost`
+  * **Gestor de BBDD:** `http://localhost:8080`
 
-(No necesitas ejecutar `npm run dev`, el contenedor `laravel-vite` ya lo está haciendo por ti).
+*(No necesitas ejecutar `npm run dev`, el contenedor `laravel-vite` ya lo está haciendo por ti.)*
