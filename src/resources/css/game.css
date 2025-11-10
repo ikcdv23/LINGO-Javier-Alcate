@@ -599,25 +599,6 @@ dialog#perfilModal form > *:not(:first-child) {
     padding-top: 1rem;
 }
 
-/* Responsive para móviles */
-@media (max-width: 600px) {
-    dialog#perfilModal {
-        padding: 1rem 1.5rem;
-        min-width: 280px;
-    }
-
-    dialog#perfilModal h2 {
-        font-size: 1.4rem;
-        margin-bottom: 1rem;
-    }
-
-    dialog#perfilModal a,
-    dialog#perfilModal form form button,
-    dialog#perfilModal button[type="button"] {
-        padding: 0.6rem 1.2rem;
-        font-size: 0.9rem;
-    }
-}
 
 /* ======================================= */
 /* 6. RESPONSIVE Y MEDIA QUERIES           */
@@ -673,5 +654,21 @@ dialog#perfilModal form > *:not(:first-child) {
     dialog#finPartida div {
         /* En móvil, los botones apilados (column) se ven mejor */
         flex-direction: column;
+    }
+     dialog#perfilModal {
+        padding: 1rem 1.5rem;
+        min-width: 280px;
+    }
+
+    dialog#perfilModal h2 {
+        font-size: 1.4rem;
+        margin-bottom: 1rem;
+    }
+
+    dialog#perfilModal a,
+    dialog#perfilModal form form button,
+    dialog#perfilModal button[type="button"] {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
     }
 }

@@ -44,9 +44,13 @@ Route::get('/ranking', [PartidaController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('ranking.index');
 
-Route::post('/partidas', [PartidaController::class, 'store'])
+Route::post('/guardar_estadisticas', [PartidaController::class, 'store'])
     ->middleware(['auth', 'verified'])
     ->name('partidas.store');
 
+Route::get('/api/user-stats', [PartidaController::class, 'getUserStats'])
+    ->middleware(['auth', 'verified'])
+    ->name('api.user-stats');
+
 // --- RUTAS DE AUTENTICACIÓN (De Breeze) ---
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
