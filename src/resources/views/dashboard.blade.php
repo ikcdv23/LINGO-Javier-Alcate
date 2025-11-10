@@ -1,3 +1,4 @@
+@section('title') -¡A jugar! @endsection
 <x-app-layout>
   <header>
     <div>

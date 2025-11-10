@@ -1,6 +1,7 @@
 <?php
 
-namespace App\Http\Controllers;;
+namespace App\Http\Controllers;
+
 
 use App\Models\Partida;
 use App\Models\User; // Importante para poder actualizar el ranking
@@ -16,8 +17,8 @@ class PartidaController extends Controller
     public function index()
     {
         $ranking = User::orderBy('max_streak', 'desc') // Ordena por la racha más alta
-                       ->take(10) // Coge solo los 10 mejores
-                       ->get(['name', 'max_streak']); // Selecciona solo el nombre y la racha
+            ->take(10) // Coge solo los 10 mejores
+            ->get(['name', 'max_streak']); // Selecciona solo el nombre y la racha
 
         // Devolvemos una vista de ranking (que crearemos luego)
         // y le pasamos los datos del ranking
@@ -71,14 +72,49 @@ class PartidaController extends Controller
             'max_streak' => $user->max_streak,
         ]);
     }
-
-    /*
-     * El resto de métodos (create, show, edit, etc.)
-     * los dejamos vacíos por ahora.
+    /**
+     * Obtiene las estadísticas personales del usuario autenticado.
+     * (Esta es la PARTE B de nuestro plan)
      */
-    public function create() {}
-    public function show(Partida $partida) {}
-    public function edit(Partida $partida) {}
-    public function update(Request $request, Partida $partida) {}
-    public  function destroy(Partida $partida) {}
+    public function getUserStats()
+    {
+        $user = Auth::user(); // Obtenemos al usuario logueado
+
+        // 1. Obtenemos las rachas (que ya están en la tabla 'users')
+        $rachaActual = $user->current_streak;
+        $mejorRacha = $user->max_streak;
+
+        // 2. Contamos las partidas (gracias a la relación que acabamos de crear)
+        $partidasJugadas = $user->partidas()->count();
+        $victorias = $user->partidas()->where('ganada', true)->count();
+
+        // 3. Calculamos el porcentaje
+        $porcentajeVictorias = ($partidasJugadas > 0) ? round(($victorias / $partidasJugadas) * 100) : 0;
+
+        // 4. Devolvemos todo como JSON
+        return response()->json([
+            'username' => $user->name,
+            'partidas_jugadas' => $partidasJugadas,
+            'victorias' => $victorias,
+            'porcentaje_victorias' => $porcentajeVictorias,
+            'racha_actual' => $rachaActual,
+            'mejor_racha' => $mejorRacha,
+        ]);
+    }
+
+    public function create()
+    {
+    }
+    public function show(Partida $partida)
+    {
+    }
+    public function edit(Partida $partida)
+    {
+    }
+    public function update(Request $request, Partida $partida)
+    {
+    }
+    public function destroy(Partida $partida)
+    {
+    }
 }

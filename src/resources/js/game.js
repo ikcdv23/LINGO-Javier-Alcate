@@ -110,6 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
             pausarJuego();
             verPerfil();
         });
+
     // cerrar perfil MODAL
     document
         .getElementById("btn-cerrar-perfil")
@@ -118,14 +119,8 @@ document.addEventListener("DOMContentLoaded", () => {
             reanudarJuego();
         });
 
-    // boton de jugar de nuevo MAIN
-    document
-        .getElementById("btn-jugar-de-nuevo")
-        .addEventListener("click", () => {
-            document.getElementById("finPartida").close();
-            iniciarJuego();
-        });
 
+        
     // jugar de nuevo MODAL
     document
         .getElementById("btn-jugar-de-nuevo-modal")
@@ -275,9 +270,13 @@ function startTimer() {
 // === FIN DE PARTIDA
 // ==========================
 function finDePartida(victoria) {
+    // victoria es un booleano donde true es ganar y false es perder
     juegoActivo = false;
     clearInterval(timerInterval);
     mostrarMensaje(`La palabra correcta era: ${palabraSecreta}`);
+
+    // Llama a la funcinon que guardara la victoriaa en las estadisticas
+    guardarVictoria(victoria, palabraSecreta);
 
     const frase = victoria
         ? frasesVictoria[Math.floor(Math.random() * frasesVictoria.length)]
@@ -315,6 +314,59 @@ function reanudarJuego() {
 }
 
 // ==========================
+// === GUARDADO DE ESTADÍSTICAS
+// ==========================
+
+// funcion que guarda la victoria o derrota en las estadisticas del usuario (lleva a la base de datos )
+async function guardarVictoria(victoria, palabraSecreta) {
+    // capturar captura el token CSRF
+    const token = document
+        .querySelector('meta[name="csrf-token"]')
+        .getAttribute("content");
+
+    // se guardan los datos de la partida: la palabra secreta y resultado de la partida
+    const datosPartida = {
+        ganada: victoria, // true o false
+        palabra_secreta: palabraSecreta, // La palabra que se jugó
+    };
+
+    // confirma que funciona la conexion con el servidor
+    console.log("Guardando resultado de la partida:", datosPartida);
+
+    try {
+        const response = await fetch("/guardar_estadisticas", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": token, // el token se envia
+            },
+            body: JSON.stringify(datosPartida), // transforma los datos en JSON
+        });
+
+        if (!response.ok) {
+            // en caso de error envia una excepcion
+            throw new Error(`Error HTTP: ${response.status}`);
+        }
+
+        // si todo va bien continua
+        const data = await response.json(); // lee la respuesta de laravel
+
+        // para monitorizar que todo ha ido bien
+        console.log("Estadísticas guardadas:", data);
+    } catch (error) {
+        // catch de errores
+        console.error("Error al guardar las estadísticas:", error);
+    }
+}
+
+/*async function guardarRachaActual(resultado) {
+    // capturar captura el token CSRF
+    const token = document
+        .querySelector('meta[name="csrf-token"]')
+        .getAttribute("content");       
+}*/
+
+// ==========================
 // === UTILIDADES
 // ==========================
 function mostrarMensaje(texto) {
@@ -339,9 +391,48 @@ function jugarDeNuevo() {
     iniciarJuego();
 }
 
-function estadisticas() {
+async function estadisticas() {
     document.getElementById("finPartida").close();
     document.getElementById("modalEstadisticas").showModal();
+
+    // hacer cosas en laravel para obtener datos tarda mucho asi q ue pongo datos de carga
+    document.getElementById("finPartida").close();
+    const modal = document.getElementById("modalEstadisticas");
+    modal.showModal();
+
+    document.getElementById("stats-username").innerText = "Cargando...";
+    document.getElementById("stats-jugadas").innerText = "Cargando...";
+    document.getElementById("stats-victorias").innerText = "Cargando...";
+    document.getElementById("stats-porcentaje").innerText = "Cargando...";
+    document.getElementById("stats-racha").innerText = "Cargando...";
+    document.getElementById("stats-mejor-racha").innerText = "Cargando...";
+
+    console.log("...");
+
+    try {
+        // en web defini la ruta /api/user-stats que devuelve las estadisticas del usuario
+        const response = await fetch("/api/user-stats");
+
+        if (!response.ok) {
+            throw new Error(`Error: ${response.status}`);
+        }
+        const stats = await response.json();
+        console.log("Estadísticas recibidas:", stats);
+
+        // 3. Rellenamos el modal con la respuesta del "chef" (el JSON)
+        document.getElementById("stats-username").innerText = stats.username;
+        document.getElementById("stats-jugadas").innerText =
+            stats.partidas_jugadas;
+        document.getElementById("stats-victorias").innerText = stats.victorias;
+        document.getElementById("stats-porcentaje").innerText =
+            stats.porcentaje_victorias + "%";
+        document.getElementById("stats-racha").innerText = stats.racha_actual;
+        document.getElementById("stats-mejor-racha").innerText =
+            stats.mejor_racha;
+    } catch (error) {
+        console.error("Error al obtener las estadísticas:", error);
+        document.getElementById("stats-username").innerText = "Error al cargar";
+    }
 }
 
 function verPerfil() {
