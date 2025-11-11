@@ -6,6 +6,7 @@
       <nav>
         <button id="btn-estadisticas" class="nav-btn"><i class="fa-solid fa-chart-line"></i></button>
         <button id="btn-perfil" class="nav-btn"><i class="fa-solid fa-user"></i></button>
+        <button id="btn-pausa" class="nav-btn"><i class="fa-solid fa-pause"></i></button>
       </nav>
     </div>
   </header>
