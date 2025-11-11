@@ -599,6 +599,101 @@ dialog#perfilModal form > *:not(:first-child) {
     padding-top: 1rem;
 }
 
+/* ==========================
+   === ESTILOS MODAL PAUSA
+   ========================== */
+
+/* * Estilo base para el modal de pausa.
+ * Usamos 'dialog' como selector.
+ */
+#modalPausa {
+    margin : auto;
+    width: 90%;
+    max-width: 400px;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    padding: 0;
+    text-align: center;
+    border: 2px solid var(--color-accent, #138d97); /* Borde de acento */
+}
+
+/* * Fondo oscuro semitransparente que aparece
+ * detrás del modal cuando está abierto.
+ */
+#modalPausa::backdrop {
+    background: rgba(27, 31, 34, 0.6); /* --color-text-dark con transparencia */
+    backdrop-filter: blur(3px);
+}
+
+/* Cabecera del modal */
+#modalPausa header {
+    padding: 1rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-primary-dark, #045b61); /* Cian oscuro */
+    background-color: var(--color-header-bg, #c0f1f6); /* Fondo cabecera */
+    border-bottom: 2px solid var(--color-accent, #138d97);
+}
+
+/* Contenido principal del modal */
+#modalPausa main {
+    padding: 1.5rem;
+    background-color: var(
+        --color-background-light,
+        #e9f9fb
+    ); /* Fondo principal */
+    color: var(--color-text-dark, #1b1f22);
+}
+
+#modalPausa main h2 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+}
+
+/* * Contenedor para los botones
+ * Usamos Flexbox para ordenarlos
+ */
+#modalPausa main .botones-pausa {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem; /* Espacio entre botones */
+}
+
+/* * Estilo de los botones dentro del modal
+ * Usamos los colores de acento y primario oscuro
+ */
+#modalPausa main button {
+    font-family: "Poppins", sans-serif; /* Asegúrate de que coincida con tu juego */
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: var(--color-accent, #138d97);
+    color: white;
+    transition: background-color 0.2s ease;
+}
+
+#modalPausa main button:hover {
+    background-color: var(
+        --color-primary-dark,
+        #045b61
+    ); /* Color oscuro al pasar el ratón */
+}
+
+/* Estilo especial para el botón "Abandonar" (más peligroso) */
+#modalPausa main #btn-abandonar-juego {
+    background-color: #95a5a6; /* Gris de 'letra incorrecta' */
+    color: #fff;
+}
+
+#modalPausa main #btn-abandonar-juego:hover {
+    background-color: #7f8c8d;
+}
 
 /* ======================================= */
 /* 6. RESPONSIVE Y MEDIA QUERIES           */
@@ -655,7 +750,7 @@ dialog#perfilModal form > *:not(:first-child) {
         /* En móvil, los botones apilados (column) se ven mejor */
         flex-direction: column;
     }
-     dialog#perfilModal {
+    dialog#perfilModal {
         padding: 1rem 1.5rem;
         min-width: 280px;
     }

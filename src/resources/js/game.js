@@ -85,6 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document
         .getElementById("btn-estadisticas")
         .addEventListener("click", () => {
+            mostrarAdvertenciaPausa();
             pausarJuego();
             estadisticas();
         });
@@ -97,6 +98,13 @@ document.addEventListener("DOMContentLoaded", () => {
             estadisticas();
         });
 
+    // cerrar estadisticas MODAL
+    document
+        .getElementById("btn-cerrar-estadisticas")
+        .addEventListener("click", () => {
+            document.getElementById("modalEstadisticas").close();
+            reanudarJuego();
+        });
     // boton de perfil MAIN
     document.getElementById("btn-perfil").addEventListener("click", () => {
         pausarJuego();
@@ -119,14 +127,50 @@ document.addEventListener("DOMContentLoaded", () => {
             reanudarJuego();
         });
 
-
-        
     // jugar de nuevo MODAL
     document
         .getElementById("btn-jugar-de-nuevo-modal")
         .addEventListener("click", () => {
             jugarDeNuevo();
         });
+
+    // Botón de Pausa (en el header)
+    document.getElementById("btn-pausa").addEventListener("click", pausarJuego);
+
+    // Botones *dentro* del Modal de Pausa
+    document
+        .getElementById("btn-reanudar-juego")
+        .addEventListener("click", reanudarJuego);
+    document
+        .getElementById("btn-reiniciar-juego")
+        .addEventListener("click", reiniciarJuego);
+
+    // --- FIN DEL ARREGLO DE PAUSA ---
+
+    // Botones de Estadísticas
+    document
+        .getElementById("btn-estadisticas")
+        .addEventListener("click", estadisticas);
+    document
+        .getElementById("btn-estadisticas-modal")
+        .addEventListener("click", estadisticas);
+
+    // Botones de Perfil
+    document.getElementById("btn-perfil").addEventListener("click", verPerfil);
+    document
+        .getElementById("btn-perfil-modal")
+        .addEventListener("click", verPerfil);
+    document
+        .getElementById("btn-cerrar-perfil")
+        .addEventListener("click", () => {
+            document.getElementById("perfilModal").close();
+            reanudarJuego(); // O quizá solo cerrar el modal sin reanudar
+        });
+
+    // Botón Jugar de Nuevo (Modal Fin Partida)
+    document
+        .getElementById("btn-jugar-de-nuevo-modal")
+        .addEventListener("click", jugarDeNuevo);
 });
 
 // ==========================
@@ -202,7 +246,7 @@ async function verificarPalabra() {
         const checkData = await checkResp.json();
 
         if (!checkData.exists) {
-            mostrarMensaje("❌ La palabra no existe en el diccionario");
+            mostrarMensaje("La palabra no existe en el diccionario");
             return;
         }
 
@@ -293,24 +337,56 @@ function finDePartida(victoria) {
 // === FUNCIÓN DE PAUSA
 // ==========================
 
+// Esta es la ÚNICA función que debe llamar el botón de pausa
 function pausarJuego() {
     if (!juegoActivo || juegoPausado) return;
 
     juegoPausado = true;
-    tiempoAlPausar = tiempoRestante;
-    clearInterval(timerInterval);
+    tiempoAlPausar = tiempoRestante; // Guarda el tiempo
+    clearInterval(timerInterval); // Detiene el reloj
 
-    mostrarMensaje("⚠️ Juego en pausa - Al regresar se reiniciará la partida");
+    mostrarMensaje(" Juego en pausa ");
     console.log("Juego pausado. Tiempo guardado:", tiempoAlPausar);
+
+    // ¡LA LÍNEA CLAVE QUE FALTABA!
+    // Abre el modal de pausa
+    document.getElementById("modalPausa").showModal();
 }
 
 function reanudarJuego() {
     if (!juegoPausado) return;
-
     juegoPausado = false;
 
-    mostrarMensaje("🔄 Partida reiniciada - ¡Nuevo intento!");
-    iniciarJuego(); // Esto reinicia completamente la partida
+    mostrarMensaje(" Partida reanudada");
+
+    // Cierra el modal de pausa (¡Faltaba esto!)
+    document.getElementById("modalPausa").close();
+
+    // Restaurar el temporizador con el tiempo guardado
+    tiempoRestante = tiempoAlPausar;
+    timerElement.textContent = tiempoRestante;
+
+    // Reinicia el intervalo del reloj
+    timerInterval = setInterval(() => {
+        tiempoRestante--;
+        timerElement.textContent = tiempoRestante;
+
+        if (tiempoRestante <= 0) {
+            clearInterval(timerInterval);
+            mostrarMensaje("¡Se acabó el tiempo!");
+            finDePartida(false); // Asegúrate de que finDePartida(false) existe
+        }
+    }, 1000);
+
+    console.log("Juego reanudado. Tiempo restaurado:", tiempoRestante);
+}
+
+function reiniciarJuego() {
+    // Cierra el modal de pausa
+    document.getElementById("modalPausa").close();
+    juegoPausado = false; // Asegúrate de resetear el estado de pausa
+    // Reinicia la partida desde cero (tu función jugarDeNuevo hace esto)
+    jugarDeNuevo();
 }
 
 // ==========================
@@ -358,13 +434,6 @@ async function guardarVictoria(victoria, palabraSecreta) {
         console.error("Error al guardar las estadísticas:", error);
     }
 }
-
-/*async function guardarRachaActual(resultado) {
-    // capturar captura el token CSRF
-    const token = document
-        .querySelector('meta[name="csrf-token"]')
-        .getAttribute("content");       
-}*/
 
 // ==========================
 // === UTILIDADES

@@ -6,6 +6,7 @@
       <nav>
         <button id="btn-estadisticas" class="nav-btn"><i class="fa-solid fa-chart-line"></i></button>
         <button id="btn-perfil" class="nav-btn"><i class="fa-solid fa-user"></i></button>
+        <button id="btn-pausa" class="nav-btn"><i class="fa-solid fa-pause"></i></button>
       </nav>
     </div>
   </header>
@@ -191,14 +192,13 @@
       </div>
     </dialog>
 
-    <!-- MODAL DE ADVERTENCIA AL ABANDONAR PARTIDA -->
-    <dialog class="modalAdvertencia">
-      <header>¡ESTA PARTIDA SE PERDERA!</header>
+    <!-- MODAL DE PAUSA -->
+    <dialog id="modalPausa" class="modalPausa">
+      <header>LINGO</header>
       <main>
-        <h2>Al ejecutar esta acción abandonaras esta partida y sera necesario reiniciarla al volver.</h2>
-        <h3>¿Deseas continuar?</h3>
-        <button type="button" onclick="cerrarAdvertencia()">Cancelar</button>
-        <button type="button" onclick="reiniciarPartida()">Aceptar</button>
+        <h2>Opciones</h2>
+        <button type="button" id="btn-reanudar-juego">Continuar Juego</button>
+        <button type="button" id="btn-reiniciar-juego">Reiniciar Partida</button>
       </main>
     </dialog>
 
