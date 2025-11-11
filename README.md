@@ -1,4 +1,4 @@
-# 🚀 LINGOverse (Reto 1 - DAW)
+# LINGO (Reto 1 - DAW)
 
 Este proyecto es una implementación del juego Lingo construido con Laravel 12 y Docker, siguiendo los requisitos del reto de 1ª Evaluación.
 
@@ -6,13 +6,13 @@ La rama `main` contiene la configuración inicial y la rama `dev` contiene la in
 
 -----
 
-## 📋 Prerrequisitos
+## Prerrequisitos
 
   * **Docker Desktop**
 
 -----
 
-## ⚙️ Instrucciones de Puesta en Marcha (Desde Cero)
+## Instrucciones de Puesta en Marcha (Desde Cero)
 
 Esta guía es para levantar el proyecto completo (rama `dev`) en un nuevo entorno.
 
@@ -35,7 +35,7 @@ Esta guía es para levantar el proyecto completo (rama `dev`) en un nuevo entorn
 
 ### 2\. Configuración de Laravel y Base de Datos (¡CRÍTICO\!)
 
-#### ⚠️ IMPORTANTE: Modificar el Archivo `.env`
+#### IMPORTANTE: Modificar el Archivo `.env`
 
 Por defecto, Laravel usa SQLite y no se conectará a MySQL. **Debes hacer este paso inmediatamente después del Paso 4.**
 
@@ -96,7 +96,7 @@ La tabla `palabras` está vacía. Vamos a llenarla.
 
 -----
 
-## 🎮 ¡Listo\!
+## ¡Listo\!
 
 Ya está todo funcionando:
 
