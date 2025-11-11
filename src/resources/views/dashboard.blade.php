@@ -128,7 +128,8 @@
         </ul>
 
         <footer>
-          <button type="submit" class="btn-cerrar">Cerrar</button>
+
+          <button type="submit" class="btn-cerrar-estadisticas">Cerrar</button>
         </footer>
 
       </form>
@@ -192,14 +193,14 @@
       </div>
     </dialog>
 
-    <!-- MODAL DE ADVERTENCIA AL ABANDONAR PARTIDA -->
-    <dialog class="modalAdvertencia">
-      <header>¡ESTA PARTIDA SE PERDERA!</header>
+    <!-- MODAL DE PAUSA -->
+    <dialog id="modalPausa" class="modalPausa">
+      <header>LINGO</header>
       <main>
-        <h2>Al ejecutar esta acción abandonaras esta partida y sera necesario reiniciarla al volver.</h2>
-        <h3>¿Deseas continuar?</h3>
-        <button type="button" onclick="cerrarAdvertencia()">Cancelar</button>
-        <button type="button" onclick="reiniciarPartida()">Aceptar</button>
+        <h2>Opciones</h2>
+        <button type="button" id="btn-continuar-juego">Continuar Juego</button>
+        <button type="button" id="btn-reiniciar-juego">Reiniciar Partida</button>
+        <button type="button" id="confirmar-salida">Abandonar Partida</button>
       </main>
     </dialog>
 

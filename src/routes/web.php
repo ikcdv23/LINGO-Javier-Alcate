@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PalabraController;
-use App\Http\Controllers\PartidaController; // <-- ¡Importa el nuevo controlador!
+use App\Http\Controllers\PartidaController; // <-- Asegúrate de importar PartidaController
 
 /*
 |--------------------------------------------------------------------------
@@ -28,10 +28,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// --- RUTAS DE PALABRAS ---
+// --- RUTAS DE PRUEBA DE PALABRAS ---
 Route::get('/palabras', [PalabraController::class, 'index'])->name('palabras.index');
-Route::get('/palabrasStyled', [PalabraController::class, 'indexStyled'])->name('palabras.indexStyled');
-Route::get('/palabrasBlade', [PalabraController::class, 'indexBlade'])->name('palabras.indexBlade');
 Route::get('/palabrasRandom/{cantidad?}', [PalabraController::class, 'indexRandom'])->name('palabras.indexRandomw');
 
 // --- RUTA API PARA VERIFICAR PALABRA ---
@@ -39,18 +37,26 @@ Route::get('/verificarPalabra/{palabra}', [PalabraController::class, 'verificarP
     ->middleware(['auth', 'verified'])
     ->name('palabras.verificarPalabra');
 
-// --- RUTAS DEL RANKING Y PARTIDAS ---
+// --- RUTA DEL RANKING GLOBAL ---
 Route::get('/ranking', [PartidaController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('ranking.index');
 
-Route::post('/guardar_estadisticas', [PartidaController::class, 'store'])
+
+// !! ----- RUTAS CORREGIDAS  ----- !!
+
+// 1. Ruta para GUARDAR partida (Tu JS llama a '/partidas')
+Route::post('/partidas', [PartidaController::class, 'store'])
     ->middleware(['auth', 'verified'])
     ->name('partidas.store');
 
+// 2. Ruta para CARGAR estadísticas (Tu JS llama a '/api/user-stats')
 Route::get('/api/user-stats', [PartidaController::class, 'getUserStats'])
     ->middleware(['auth', 'verified'])
     ->name('api.user-stats');
 
+// !! ----------------------------------------------- !!
+
+
 // --- RUTAS DE AUTENTICACIÓN (De Breeze) ---
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';

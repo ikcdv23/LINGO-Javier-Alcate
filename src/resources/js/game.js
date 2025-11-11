@@ -41,12 +41,14 @@ const frasesDerrota = [
 ];
 
 // ==========================
-// === INICIO DEL JUEGO
+// === INICIO Y ESCUCHADORES (Listeners)
 // ==========================
 document.addEventListener("DOMContentLoaded", () => {
+    // Elementos principales
     timerElement = document.getElementById("tiempoRestante");
-    document.getElementById("modalInicio").showModal();
 
+    // Modal de Inicio
+    document.getElementById("modalInicio").showModal();
     document
         .getElementById("btn-empezar-juego")
         .addEventListener("click", () => {
@@ -54,26 +56,19 @@ document.addEventListener("DOMContentLoaded", () => {
             iniciarJuego();
         });
 
-    // ********** CONEXIÓN MANUAL PARA CERRAR SESIÓN **********
+    // --- Logout (Cerrar Sesión) ---
     const btnCerrarSesion = document.getElementById("btn-cerrar-sesion");
     const logoutForm = document.getElementById("logout-form");
-
     if (btnCerrarSesion && logoutForm) {
-        btnCerrarSesion.addEventListener("click", function (event) {
-            // Previene la acción por defecto del botón (si fuera submit)
+        btnCerrarSesion.addEventListener("click", (event) => {
             event.preventDefault();
-
-            // Envía el formulario POST de logout
             logoutForm.submit();
         });
     }
-    // **********************************************************
 
-    // === ESCUCHADORES ===
-    // Teclado virtual escucha el click y escribe la letra correspondiente
+    // --- Teclado ---
     document.getElementById("teclado").addEventListener("click", (e) => {
         if (e.target.tagName !== "BUTTON" || !juegoActivo) return;
-
         const tecla = e.target.id;
         if (tecla === "enter") verificarPalabra();
         else if (tecla === "borrar") borrarLetra();
@@ -81,37 +76,42 @@ document.addEventListener("DOMContentLoaded", () => {
             escribirLetra(tecla.replace("tecla", ""));
     });
 
-    // boton de estadisticas MAIN
+    // --- Botones del Header (Estadísticas, Perfil, Pausa) ---
     document
         .getElementById("btn-estadisticas")
         .addEventListener("click", () => {
             pausarJuego();
             estadisticas();
         });
-
-    // estadisticas MODAL
-    document
-        .getElementById("btn-estadisticas-modal")
-        .addEventListener("click", () => {
-            pausarJuego();
-            estadisticas();
-        });
-
-    // boton de perfil MAIN
     document.getElementById("btn-perfil").addEventListener("click", () => {
         pausarJuego();
         verPerfil();
     });
+    document.getElementById("btn-pausa").addEventListener("click", pausarJuego);
 
-    // perfil MODAL
+    // --- Botones del Modal de Pausa  ---
+    document
+        .getElementById("btn-continuar-juego")
+        .addEventListener("click", reanudarJuego);
+    document
+        .getElementById("btn-reiniciar-juego")
+        .addEventListener("click", reiniciarJuego);
+    document
+        .getElementById("confirmar-salida")
+        .addEventListener("click", abandonarJuego);
+
+    // --- Botones del Modal Fin Partida ---
+    document
+        .getElementById("btn-jugar-de-nuevo-modal")
+        .addEventListener("click", jugarDeNuevo);
+    document
+        .getElementById("btn-estadisticas-modal")
+        .addEventListener("click", estadisticas);
     document
         .getElementById("btn-perfil-modal")
-        .addEventListener("click", () => {
-            pausarJuego();
-            verPerfil();
-        });
+        .addEventListener("click", verPerfil);
 
-    // cerrar perfil MODAL
+    // --- Botones del Modal Perfil ---
     document
         .getElementById("btn-cerrar-perfil")
         .addEventListener("click", () => {
@@ -119,14 +119,17 @@ document.addEventListener("DOMContentLoaded", () => {
             reanudarJuego();
         });
 
-
-        
-    // jugar de nuevo MODAL
-    document
-        .getElementById("btn-jugar-de-nuevo-modal")
-        .addEventListener("click", () => {
-            jugarDeNuevo();
+    // --- Botón Cerrar Estadísticas ---
+    // (Asegúrate de que tu botón "Cerrar" en el modal de estadísticas tiene este ID)
+    const btnCerrarStats = document.querySelector(
+        "#modalEstadisticas .btn-cerrar"
+    );
+    if (btnCerrarStats) {
+        btnCerrarStats.addEventListener("click", () => {
+            document.getElementById("modalEstadisticas").close();
+            reanudarJuego();
         });
+    }
 });
 
 // ==========================
@@ -140,27 +143,25 @@ async function iniciarJuego() {
         const data = await resp.json();
         palabraSecreta = (data.word || "").toLowerCase();
 
-        // Validar la palabra recibida
         if (!palabraSecreta || palabraSecreta.length !== LONGITUD_PALABRA) {
             throw new Error("Palabra inválida recibida desde la API");
         }
 
-        // prepara el tablero para a nuev ronda
         resetTablero();
         juegoActivo = true;
+        juegoPausado = false;
         mostrarMensaje("¡Juego listo! Adivina la palabra.");
         startTimer();
         console.log("Palabra secreta:", palabraSecreta);
     } catch (err) {
-        mostrarMensaje("ERROR: No se pudo conectar con el servidor.");
+        mostrarMensaje("No se pudo conectar con el servidor.");
         console.error(err);
         juegoActivo = false;
     }
 }
 
 function escribirLetra(letra) {
-    if (!juegoActivo || columna >= LONGITUD_PALABRA) return;
-
+    if (!juegoActivo || juegoPausado || columna >= LONGITUD_PALABRA) return;
     const celda = document.getElementById(`celda_${fila + 1}_${columna + 1}`);
     celda.innerText = letra;
     palabraUsuario += letra.toLowerCase();
@@ -168,8 +169,7 @@ function escribirLetra(letra) {
 }
 
 function borrarLetra() {
-    if (columna === 0) return;
-
+    if (!juegoActivo || juegoPausado || columna === 0) return;
     columna--;
     const celda = document.getElementById(`celda_${fila + 1}_${columna + 1}`);
     celda.innerText = "";
@@ -178,40 +178,33 @@ function borrarLetra() {
 }
 
 // ==========================
-// === VERIFICACIÓN DE PALABRA EN DICCIONARIO
+// === VERIFICACIÓN
 // ==========================
 async function verificarPalabra() {
-    if (!juegoActivo) return;
-
+    if (!juegoActivo || juegoPausado) return;
     if (palabraUsuario.length < LONGITUD_PALABRA) {
         mostrarMensaje("La palabra debe tener 5 letras");
         return;
     }
 
-    // Verificar si la palabra existe en el diccionario
     mostrarMensaje("Verificando palabra...");
 
     try {
         const palabraParaVerificar = palabraUsuario.toLowerCase();
         const checkResp = await fetch(CHECK_ENDPOINT + palabraParaVerificar);
 
-        if (!checkResp.ok) {
-            throw new Error(`Error HTTP: ${checkResp.status}`);
-        }
-
+        if (!checkResp.ok) throw new Error(`Error HTTP: ${checkResp.status}`);
         const checkData = await checkResp.json();
 
         if (!checkData.exists) {
-            mostrarMensaje("❌ La palabra no existe en el diccionario");
+            mostrarMensaje("La palabra no existe en el diccionario");
             return;
         }
 
-        // Si la palabra existe, proceder con la verificación normal
         procesarPalabraValida();
     } catch (err) {
         console.error("Error verificando palabra:", err);
-        mostrarMensaje("⚠️ Error verificando palabra. Continuando...");
-        // Si hay error en la verificación, permitimos continuar
+        mostrarMensaje("Error verificando palabra. Continuando...");
         procesarPalabraValida();
     }
 }
@@ -233,16 +226,14 @@ function procesarPalabraValida() {
         }
     }
 
-    if (aciertos === LONGITUD_PALABRA) {
-        finDePartida(true);
-    } else if (fila === 4) {
-        finDePartida(false);
-    } else {
+    if (aciertos === LONGITUD_PALABRA) finDePartida(true);
+    else if (fila === 4) finDePartida(false);
+    else {
         fila++;
         columna = 0;
         palabraUsuario = "";
         mostrarMensaje("Palabra incorrecta, intenta otra.");
-        startTimer();
+        startTimer(); // Inicia el timer para la nueva fila/intento
     }
 }
 
@@ -255,6 +246,8 @@ function startTimer() {
     timerElement.textContent = tiempoRestante;
 
     timerInterval = setInterval(() => {
+        if (juegoPausado) return; // No descontar tiempo si está en pausa
+
         tiempoRestante--;
         timerElement.textContent = tiempoRestante;
 
@@ -270,12 +263,11 @@ function startTimer() {
 // === FIN DE PARTIDA
 // ==========================
 function finDePartida(victoria) {
-    // victoria es un booleano donde true es ganar y false es perder
     juegoActivo = false;
     clearInterval(timerInterval);
     mostrarMensaje(`La palabra correcta era: ${palabraSecreta}`);
 
-    // Llama a la funcinon que guardara la victoriaa en las estadisticas
+    // Llama a la función que guarda la partida en el backend
     guardarVictoria(victoria, palabraSecreta);
 
     const frase = victoria
@@ -290,81 +282,135 @@ function finDePartida(victoria) {
 }
 
 // ==========================
-// === FUNCIÓN DE PAUSA
+// === FUNCIÓN DE PAUSA (Limpio)
 // ==========================
-
 function pausarJuego() {
     if (!juegoActivo || juegoPausado) return;
-
     juegoPausado = true;
     tiempoAlPausar = tiempoRestante;
     clearInterval(timerInterval);
-
-    mostrarMensaje("⚠️ Juego en pausa - Al regresar se reiniciará la partida");
+    mostrarMensaje(" Juego en pausa ");
     console.log("Juego pausado. Tiempo guardado:", tiempoAlPausar);
+    document.getElementById("modalPausa").showModal();
 }
 
 function reanudarJuego() {
     if (!juegoPausado) return;
-
     juegoPausado = false;
+    mostrarMensaje(" Partida reanudada");
+    document.getElementById("modalPausa").close(); // Asegurarse de cerrar el modal
 
-    mostrarMensaje("🔄 Partida reiniciada - ¡Nuevo intento!");
-    iniciarJuego(); // Esto reinicia completamente la partida
+    // Restaurar el temporizador
+    tiempoRestante = tiempoAlPausar;
+    timerElement.textContent = tiempoRestante;
+    startTimer(); // Llama a startTimer que ya maneja el intervalo
+
+    console.log("Juego reanuda. Tiempo restaurado:", tiempoRestante);
+}
+
+function reiniciarJuego() {
+    document.getElementById("modalPausa").close();
+    juegoPausado = false;
+    jugarDeNuevo(); // jugarDeNuevo ya resetea e inicia el juego
+}
+
+function abandonarJuego() {
+    juegoActivo = false;
+    juegoPausado = false;
+    clearInterval(timerInterval);
+    mostrarMensaje("Juego abandonado.");
+    document.getElementById("modalPausa").close();
+
+    // abandonar cuenta como derrota
+    finDePartida(false);
 }
 
 // ==========================
 // === GUARDADO DE ESTADÍSTICAS
 // ==========================
-
-// funcion que guarda la victoria o derrota en las estadisticas del usuario (lleva a la base de datos )
 async function guardarVictoria(victoria, palabraSecreta) {
-    // capturar captura el token CSRF
+    // 1. Obtenemos el Token CSRF
     const token = document
         .querySelector('meta[name="csrf-token"]')
         .getAttribute("content");
 
-    // se guardan los datos de la partida: la palabra secreta y resultado de la partida
+    // 2. Preparamos los datos
     const datosPartida = {
-        ganada: victoria, // true o false
-        palabra_secreta: palabraSecreta, // La palabra que se jugó
+        ganada: victoria,
+        palabra_secreta: palabraSecreta,
     };
 
-    // confirma que funciona la conexion con el servidor
     console.log("Guardando resultado de la partida:", datosPartida);
 
     try {
-        const response = await fetch("/guardar_estadisticas", {
+        // 3. ¡ARREGLADO! Llamamos a /partidas (la ruta que SÍ existe)
+        const response = await fetch("/partidas", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "X-CSRF-TOKEN": token, // el token se envia
+                "X-CSRF-TOKEN": token,
             },
-            body: JSON.stringify(datosPartida), // transforma los datos en JSON
+            body: JSON.stringify(datosPartida),
         });
 
         if (!response.ok) {
-            // en caso de error envia una excepcion
-            throw new Error(`Error HTTP: ${response.status}`);
+            throw new Error(
+                `Error HTTP: ${response.status} - ${response.statusText}`
+            );
         }
 
-        // si todo va bien continua
-        const data = await response.json(); // lee la respuesta de laravel
-
-        // para monitorizar que todo ha ido bien
+        const data = await response.json();
         console.log("Estadísticas guardadas:", data);
     } catch (error) {
-        // catch de errores
         console.error("Error al guardar las estadísticas:", error);
     }
 }
 
-/*async function guardarRachaActual(resultado) {
-    // capturar captura el token CSRF
-    const token = document
-        .querySelector('meta[name="csrf-token"]')
-        .getAttribute("content");       
-}*/
+// ==========================
+// === CARGA DE ESTADÍSTICAS
+// ==========================
+async function estadisticas() {
+    // Cerramos otros modales
+    try {
+        document.getElementById("finPartida").close();
+    } catch (e) {} // Ignora el error si ya estaba cerrado
+
+    const modal = document.getElementById("modalEstadisticas");
+    modal.showModal();
+
+    // Ponemos estado de "Cargando..."
+    document.getElementById("stats-username").innerText = "Cargando...";
+    document.getElementById("stats-jugadas").innerText = "Cargando...";
+    document.getElementById("stats-victorias").innerText = "Cargando...";
+    document.getElementById("stats-porcentaje").innerText = "Cargando...";
+    document.getElementById("stats-racha").innerText = "Cargando...";
+    document.getElementById("stats-mejor-racha").innerText = "Cargando...";
+
+    try {
+        // Llamamos a la ruta API que creamos en web.php
+        const response = await fetch("/api/user-stats");
+
+        if (!response.ok) {
+            throw new Error(`Error: ${response.status}`);
+        }
+        const stats = await response.json();
+        console.log("Estadísticas recibidas:", stats);
+
+        // Rellenamos el modal con los datos
+        document.getElementById("stats-username").innerText = stats.username;
+        document.getElementById("stats-jugadas").innerText =
+            stats.partidas_jugadas;
+        document.getElementById("stats-victorias").innerText = stats.victorias;
+        document.getElementById("stats-porcentaje").innerText =
+            stats.porcentaje_victorias + "%";
+        document.getElementById("stats-racha").innerText = stats.racha_actual;
+        document.getElementById("stats-mejor-racha").innerText =
+            stats.mejor_racha;
+    } catch (error) {
+        console.error("Error al obtener las estadísticas:", error);
+        document.getElementById("stats-username").innerText = "Error al cargar";
+    }
+}
 
 // ==========================
 // === UTILIDADES
@@ -384,58 +430,14 @@ function resetTablero() {
 }
 
 function jugarDeNuevo() {
-    // Cerrar el modal correctamente
     const modal = document.getElementById("finPartida");
-    modal.close(); // Esto debería funcionar
-
+    modal.close();
     iniciarJuego();
 }
 
-async function estadisticas() {
-    document.getElementById("finPartida").close();
-    document.getElementById("modalEstadisticas").showModal();
-
-    // hacer cosas en laravel para obtener datos tarda mucho asi q ue pongo datos de carga
-    document.getElementById("finPartida").close();
-    const modal = document.getElementById("modalEstadisticas");
-    modal.showModal();
-
-    document.getElementById("stats-username").innerText = "Cargando...";
-    document.getElementById("stats-jugadas").innerText = "Cargando...";
-    document.getElementById("stats-victorias").innerText = "Cargando...";
-    document.getElementById("stats-porcentaje").innerText = "Cargando...";
-    document.getElementById("stats-racha").innerText = "Cargando...";
-    document.getElementById("stats-mejor-racha").innerText = "Cargando...";
-
-    console.log("...");
-
-    try {
-        // en web defini la ruta /api/user-stats que devuelve las estadisticas del usuario
-        const response = await fetch("/api/user-stats");
-
-        if (!response.ok) {
-            throw new Error(`Error: ${response.status}`);
-        }
-        const stats = await response.json();
-        console.log("Estadísticas recibidas:", stats);
-
-        // 3. Rellenamos el modal con la respuesta del "chef" (el JSON)
-        document.getElementById("stats-username").innerText = stats.username;
-        document.getElementById("stats-jugadas").innerText =
-            stats.partidas_jugadas;
-        document.getElementById("stats-victorias").innerText = stats.victorias;
-        document.getElementById("stats-porcentaje").innerText =
-            stats.porcentaje_victorias + "%";
-        document.getElementById("stats-racha").innerText = stats.racha_actual;
-        document.getElementById("stats-mejor-racha").innerText =
-            stats.mejor_racha;
-    } catch (error) {
-        console.error("Error al obtener las estadísticas:", error);
-        document.getElementById("stats-username").innerText = "Error al cargar";
-    }
-}
-
 function verPerfil() {
-    document.getElementById("finPartida").close();
+    try {
+        document.getElementById("finPartida").close();
+    } catch (e) {}
     document.getElementById("perfilModal").showModal();
 }
