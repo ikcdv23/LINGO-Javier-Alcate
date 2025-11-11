@@ -23,9 +23,9 @@ Esta guía es para levantar el proyecto completo (rama `dev`) en un nuevo entorn
     git clone https://github.com/ikcdv23/LINGO-Javier-Alcate.git
     cd LINGO-Javier-Alcate
     ```
-2.  **Cambiar a la Rama de Desarrollo**
+2.  **Cambiar a la Rama Main**
     ```bash
-    git checkout dev
+    git checkout main
     ```
 3.  **Levantar TODOS los Contenedores**
     ```bash
