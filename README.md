@@ -1,4 +1,4 @@
-# LINGOverse (Reto 1 - DAW)
+# LINGO (Reto 1 - DAW)
 
 Este proyecto es una implementación del juego Lingo construido con Laravel 12 y Docker, siguiendo los requisitos del reto de 1ª Evaluación.
 
