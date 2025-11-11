@@ -128,7 +128,8 @@
         </ul>
 
         <footer>
-          <button type="submit" class="btn-cerrar">Cerrar</button>
+          <button type="reset" class="btn-ranking">Reiniciar</button>  
+          <button type="submit" class="btn-cerrar-estadisticas">Cerrar</button>
         </footer>
 
       </form>
@@ -197,8 +198,9 @@
       <header>LINGO</header>
       <main>
         <h2>Opciones</h2>
-        <button type="button" id="btn-reanudar-juego">Continuar Juego</button>
+        <button type="button" id="btn-continuar-juego">Continuar Juego</button>
         <button type="button" id="btn-reiniciar-juego">Reiniciar Partida</button>
+        <button type="button" id="confirmar-salida">Abandonar Partida</button>
       </main>
     </dialog>
 
