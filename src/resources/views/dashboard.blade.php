@@ -128,7 +128,7 @@
         </ul>
 
         <footer>
-          <button type="reset" class="btn-ranking">Reiniciar</button>  
+
           <button type="submit" class="btn-cerrar-estadisticas">Cerrar</button>
         </footer>
 
